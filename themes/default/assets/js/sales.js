@@ -1957,10 +1957,10 @@ function loadItems() {
 				if (!isNaN(pds[0])) {
 				    item_discount = parseFloat((((price_tax_cal) * parseFloat(pds[0])) / 100));
 				} else {
-				    item_discount = parseFloat(ds/item_qty);
+				    item_discount = formatMoney(parseFloat(ds/item_qty));
 				}
 			} else {
-				 item_discount = parseFloat(ds/item_qty);
+				 item_discount = formatMoney(parseFloat(ds/item_qty));
 				
 			}
 			
