@@ -542,8 +542,8 @@ class Pos extends MY_Controller
 					
 					$product_tax += $pr_item_tax;
 					
-					$unit_price  = $this->erp->formatDecimal($unit_price - $pr_discount, 8);
-					echo $unit_price;
+					$unit_price  = $this->erp->formatDecimal($unit_price - $this->erp->formatDecimal($pr_discount), 8);
+					
 					if($item_option != 0) {
 						$row 		= $this->purchases_model->getVariantQtyById($item_option);
 						$item_cost  = $item_cost * $row->qty_unit;
@@ -662,58 +662,6 @@ class Pos extends MY_Controller
                 $query = $i;
             }
             
-			/*$i=1;
-			$query=0;
-
-			$date = $this->input->post('date');
-            $dates = date('Y-m-d',strtotime($date));
-			 	
-			$this->db
-                ->select("DATE_FORMAT(date,'%d') as date")
-                ->where("DATE_FORMAT(date,'%Y-%m-%d')",$dates)
-			    ->limit(1)
-                ->order_by('id DESC'); 
-            $mdate = $this->db->get('erp_sales')->row();
-            $cdate = date('d');
-
-            $this->db->select_max('queue')
-            ->where("DATE_FORMAT(date,'%Y-%m-%d')",$dates);
-            $queue = $this->db->get('erp_sales')->row(); 
-
-            $this->db->select("queue") 
-            ->where("DATE_FORMAT(date,'%Y-%m-%d')",$dates)
-            ->limit(1)
-            ->order_by('id DESC'); 
-            $Last_queue = $this->db->get('erp_sales')->row();
-
-            if ($mdate->date == $cdate) {
-                $query = $Last_queue->queue + $i;
-            } else {
-                $query = $i;
-            }*/
-			
-            /*$i=1;
-            $query=0;
-            //$dates = date('Y-m-d')." 00:00:00";
-            $date = $this->input->post('date');
-            $dates = date('Y-m-d',strtotime($date));
-                        
-            $this->db->select_max('queue')
-            ->where("DATE_FORMAT(date,'%Y-%m-%d')",$dates);
-            $queue = $this->db->get('erp_sales')->row();  
-                
-            $this->db->select("queue") 
-            ->where("DATE_FORMAT(date,'%Y-%m-%d')",$dates)
-            ->limit(1)
-            ->order_by('id DESC'); 
-            $Last_queue = $this->db->get('erp_sales')->row();
-
-            if($queue->queue == 5 && $queue->queue == $Last_queue->queue || is_null($Last_queue->queue)){
-                $query = $i;
-            }else{
-                $query = $Last_queue->queue + $i;
-            }*/
-			
             $data = array(
                 'date'              => $date,
                 'reference_no'      => $reference,
@@ -723,7 +671,6 @@ class Pos extends MY_Controller
                 'biller'            => $biller,
                 'warehouse_id'      => $warehouse_id,
                 'note'              => $note,
-                //'suspend_room'    => $suspend_room,
                 'total'             => $this->erp->formatDecimal($total),
                 'product_discount'  => $this->erp->formatDecimal($product_discount),
                 'order_discount_id' => $order_discount_id,
@@ -736,7 +683,6 @@ class Pos extends MY_Controller
                 'shipping'          => $this->erp->formatDecimal($shipping),
                 'grand_total'       => $this->erp->formatDecimal($grand_total),
                 'total_items'       => $total_items,
-               // 'total_cost'        => $totalcost,
                 'sale_status'       => $sale_status,
                 'payment_status'    => $payment_status,
                 'recieve_usd'       => $recieve_usd,
@@ -745,7 +691,6 @@ class Pos extends MY_Controller
                 'payment_term'      => $payment_term,
                 'pos'               => 1,
                 'other_cur_paid'    => $other_cur_paid ? $other_cur_paid:0,
-                //'paid'              => $paidd ? $this->erp->formatDecimal($paidd):0,
                 'created_by'        => $this->session->userdata('user_id'),
 				'suspend_note'      => isset($suppend_name->suspend_name)?$suppend_name->suspend_name:$suspend_room,
 				'other_cur_paid_rate' => $cur_rate->rate,
@@ -754,7 +699,7 @@ class Pos extends MY_Controller
 				'type_id'           => $this->input->post('sale_type_id'),
 				'queue'           	=> $query
             );
-            // $this->erp->print_arrays($data);
+            
 			
 			if($_POST['paid_by'][0] == 'depreciation'){
 				$no = sizeof($_POST['no']);
@@ -903,8 +848,6 @@ class Pos extends MY_Controller
             if (!isset($payment) || empty($payment)) {
                 $payment = array();
             }
-			
-			//$this->erp->print_arrays($data, $products, $payment);
         }
 
         if ($this->form_validation->run() == true && !empty($products) && !empty($data)) {

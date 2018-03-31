@@ -1201,6 +1201,7 @@ function loadItems() {
 			
 			var pn 				= item_note ? item_note : '';
 			var ds 				= item_ds ? item_ds : '0';
+			var item_dis        = ds.indexOf("%") !== -1 ? ds : formatMoney(ds);
 			var orderqty 		= item.orderqty;
 			ds 					= ds.toString();
 			var price_tax_cal 	= unit_price;
@@ -1224,14 +1225,14 @@ function loadItems() {
 				var pds = ds.split("%");
 				var pr_tax = item.tax_rate;
 				if (!isNaN(pds[0])) {
-					item_discount 		= (parseFloat(((price_tax_cal) * parseFloat(pds[0])) / 100));
+					item_discount 		= formatMoney(parseFloat(((price_tax_cal) * parseFloat(pds[0])) / 100));
 					product_discount 	+= parseFloat(item_discount*item_qty);  	
                     subtotal_discount 	= parseFloat(item_discount*item_qty);
 				} else {
 					item_discount = formatDecimal(ds); 
 				}
 			} else {
-				item_discount 		= parseFloat(ds);
+				item_discount 		= formatMoney(parseFloat(ds));
 				product_discount 	+= parseFloat(item_discount);
 				subtotal_discount 	= parseFloat(item_discount);
 			}
@@ -1339,7 +1340,7 @@ function loadItems() {
 				tr_html += '<input class="form-control input-sm rserial" name="serial[]" type="hidden" id="serial_' + row_no + '" value="'+item_serial+'">';
 			}
 			if (site.settings.product_discount == 1) {
-				tr_html += '<input class="form-control input-sm rdiscount" name="product_discount[]" type="hidden" id="discount_' + row_no + '" value="' + item_ds + '">';
+				tr_html += '<input class="form-control input-sm rdiscount" name="product_discount[]" type="hidden" id="discount_' + row_no + '" value="' + item_dis + '">';
 			}
 			if (site.settings.tax1 == 1) {
 				tr_html += '<input class="form-control input-sm text-right rproduct_tax" name="product_tax[]" type="hidden" id="product_tax_' + row_no + '" value="' + pr_tax.id + '"><input type="hidden" class="sproduct_tax" id="sproduct_tax_' + row_no + '" value="' + pr_tax_val * item_qty + '">';
@@ -1357,11 +1358,11 @@ function loadItems() {
 			tr_html += '<td><input class="form-control kb-pad text-center rquantity" name="quantity[]" type="text" value="' + formatDecimal(item_qty) + '" data-id="' + row_no + '" data-item="' + item_id + '" id="quantity_' + row_no + '" onClick="this.select();"><input type="hidden" value="' + formatDecimal(item_aqty) + '" name="inhand[]" class="inhand"/><input type="hidden" value="' + formatDecimal(orderqty) + '" name="qtyorder[]" class="qtyorder"/></td>';
 			
 			if (site.settings.product_discount == 1) {
-				tr_html += '<td class="text-right"><input class="form-control kb-pad text-center sdiscount" type="text" value="' + item_ds + '" data-id="' + row_no + '" data-item="' + item_id + '" id="quantity_' + row_no + '" onClick="this.select();"></td>';
+				tr_html += '<td class="text-right"><input class="form-control kb-pad text-center sdiscount" type="text" value="' + item_dis + '" data-id="' + row_no + '" data-item="' + item_id + '" id="quantity_' + row_no + '" onClick="this.select();"></td>';
 			}else{
 				tr_html += '<td class="text-right"><span class="text-right sdiscount" id="discount_' + row_no + '">' + item.row.discount + '</span></td>';
 			}
-
+			
 			subtotal = real_unit_price * item_qty - item.row.discount;
 			
             if (item_promotion == 1){

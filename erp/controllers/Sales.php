@@ -3735,11 +3735,7 @@ class Sales extends MY_Controller
     {
         return site_url('products/gen_barcode/' . $text . '/' . $bcs . '/' . $height);
     }
-
-	/* ------------------------------End----------------------------------------------------------------------------------------------- */
-
-    /* -------------------------------------------------------------------------------------------------------------------------------- */
-	/*======================================chin local updated===================================*/
+	
     function edit($id = NULL)
     {
         $this->erp->checkPermissions('edit',null,'sales');
@@ -3848,7 +3844,7 @@ class Sales extends MY_Controller
                             $pr_discount = $discount/$item_quantity;
                         }
                     }
-					$unitPrice = $unit_price;
+					$unitPrice = $unit_price;					
                     $unit_price = $this->erp->formatDecimal($unit_price - $pr_discount);
 					$item_net_price = $unit_price;
                     $pr_item_discount = $this->erp->formatDecimal($pr_discount * $item_quantity);
@@ -3897,6 +3893,7 @@ class Sales extends MY_Controller
 					}else{
 						$subtotal = ((($unit_price * $item_unit_quantity) + $pr_item_tax));
 					}
+					
 					$sale_data[] = array(
 							'slaeid' => $slaeid
 						);
@@ -3926,7 +3923,6 @@ class Sales extends MY_Controller
                 }
             }
 			
-			//$this->erp->print_arrays($products);
             if (empty($products)) {
                 $this->form_validation->set_rules('product', lang("order_items"), 'required');
             } else {
@@ -4066,7 +4062,7 @@ class Sales extends MY_Controller
 				'delivery_status' => 'pending',
                 'delivery_by' => $delivery_by
 			);
-			//$this->erp->print_arrays($dlDetails);
+			
 			$pos = $this->sales_model->getSetting();
 			if($pos->auto_delivery == 1){
 				$this->sales_model->updateDelivery($delivery_id, $dlDetails);
@@ -4139,7 +4135,7 @@ class Sales extends MY_Controller
 						);
 						$period++;
 					}
-					//$this->erp->print_arrays($loans);
+					
 				}else{
 					$loans = array();
 				}
@@ -4147,8 +4143,6 @@ class Sales extends MY_Controller
             } else {
                 $payment = array();
             }
-			
-            //$this->erp->print_arrays($data, $products, $payment);
 			
         }
 
@@ -4177,12 +4171,11 @@ class Sales extends MY_Controller
 			
             $this->session->set_userdata('remove_slls', 1);
             $this->session->set_flashdata('message', lang("sale_updated"));
-            redirect("sales");
+            redirect("pos/sales");
         } else {
 
             $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
 			$sale = $this->sales_model->getInvoiceByID($id);
-			//$this->erp->print_arrays($sale);
 			$sale_order = '';
 			if($sale->so_id > 0) {
 				$sale_order = $this->sales_model->getSaleOrder($sale->so_id);
@@ -4197,7 +4190,6 @@ class Sales extends MY_Controller
             }
 
             $inv_items = $this->sales_model->getAllInvoiceItems($id);
-            //$this->erp->print_arrays($inv_items);
 			$customer = $this->site->getCompanyByID($sale->customer_id);
 			$customer_group = $this->site->getCustomerGroupByID($customer->customer_group_id);
             $c = rand(100000, 9999999);
@@ -4225,11 +4217,7 @@ class Sales extends MY_Controller
                 }
 				$test2 = $this->sales_model->getWP2($row->id, $item->warehouse_id);
 				
-				
-				//$this->erp->print_arrays($row);
-				
-				
-                $row->id = $item->product_id;
+				$row->id = $item->product_id;
                 $row->code = $item->product_code;
                 $row->name = $item->product_name;
                 $row->type = $item->product_type;
@@ -4255,8 +4243,6 @@ class Sales extends MY_Controller
 				
 				$group_prices = $this->sales_model->getProductPriceGroup($row->id, $customer->price_group_id);
 				$all_group_prices = $this->sales_model->getProductPriceGroup($row->id);
-				
-				//$this->erp->print_arrays($all_group_prices);
 				
 				$row->quantity = $test2->quantity;
 				$row->price_id = 0;
@@ -4311,11 +4297,9 @@ class Sales extends MY_Controller
                 $biller_id = $Settings->default_biller;
             }
 			$this->load->model('purchases_model');
-			//$this->erp->print_arrays($pr);
             $this->data['inv_items'] = json_encode($pr);
             $this->data['id'] = $id;
 			$this->data['credit_limited']=(isset($customer_details)?$customer_details:"");
-            //$this->data['currencies'] = $this->site->getAllCurrencies();
             $this->data['billers'] = ($this->Owner || $this->Admin) ? $this->site->getAllCompanies('biller') : NULL;
             $this->data['tax_rates'] = $this->site->getAllTaxRates();
 			$this->data['agencies'] = $this->site->getAllUsers();
