@@ -446,6 +446,13 @@ class Pos extends MY_Controller
             //$staff_note = $this->erp->clear_tags($this->input->post('staff_note'));
 			$suspend_room 		= $this->input->post('suspend_room');
 			$reference 			= $this->input->post('reference_nob');
+            $bank_account = $this->input->post('bank_account');
+
+            if ($this->session->userdata('biller_id')) {
+                $default_biller = JSON_decode($this->session->userdata('biller_id'));
+            } else {
+                $default_biller = $this->Settings->default_biller;
+            }
 			
             $total 				= 0;
             $product_tax 		= 0;
@@ -744,7 +751,30 @@ class Pos extends MY_Controller
                         $amount = $g_total - ($pos_a - $paid);
                     }
 
-                    if (isset($_POST['amount'][$r]) && !empty($_POST['amount'][$r]) && isset($_POST['paid_by'][$r]) && !empty($_POST['paid_by'][$r])) {
+                    $payment[] = array(
+                        'biller_id' => $biller_id,
+                        'date' => $date,
+                        'reference_no' => (($_POST['paid_by'][$r] == 'deposit' || $_POST['paid_by'][$r] == 'depreciation') ? $reference : $this->site->getReference('sp', $this->session->userdata('biller_id') ? $default_biller[0] : $default_biller)),
+                        'amount' => $this->erp->formatDecimal($amount),
+                        'paid_by' => $_POST['paid_by'][$r],
+                        'cheque_no' => $_POST['cheque_no'][$r],
+                        'cc_no' => ($_POST['paid_by'][$r] == 'gift_card' ? $_POST['paying_gift_card_no'][$r] : $_POST['cc_no'][$r]),
+                        'cc_holder' => $_POST['cc_holder'][$r],
+                        'cc_month' => $_POST['cc_month'][$r],
+                        'cc_year' => $_POST['cc_year'][$r],
+                        'cc_type' => $_POST['cc_type'][$r],
+                        'cc_cvv2' => $_POST['cc_cvv2'][$r],
+                        'created_by' => $this->session->userdata('user_id'),
+                        'type' => 'received',
+                        'note' => $_POST['payment_note'][$r],
+                        'pos_paid' => $_POST['amount'][$r],
+                        'pos_balance' => ($pos_b - $this->erp->formatDecimal($grand_total)),
+                        'pos_paid_other' => $_POST['other_cur_paid'][$r],
+                        'pos_paid_other_rate' => $cur_rate->rate,
+                        'bank_account' => $bank_account[$r]
+                    );
+
+                    /*if (isset($_POST['amount'][$r]) && !empty($_POST['amount'][$r]) && isset($_POST['paid_by'][$r]) && !empty($_POST['paid_by'][$r])) {
 						if(strpos($_POST['amount'][$r], '-') !== false){
 							$payment[] = array(
 								'biller_id'				=> $biller_id,
@@ -795,16 +825,16 @@ class Pos extends MY_Controller
 						
                         $pp[] = $paidd;
                         $this->site->updateReference('sp');
-                    }
+                    }*/
                 }
-				
-				if(isset($p_cur) && empty($_POST['amount'][0])){
-					$kh_paid = true;
+
+                /*if(isset($p_cur) && empty($_POST['amount'][0])){
+                    $kh_paid = true;
                     $g_total = $this->erp->formatDecimal($grand_total);
-					for ($j = 0; $j < $p_cur; $j++) {
+                    for ($j = 0; $j < $p_cur; $j++) {
                         $pos_a += $this->erp->formatDecimal(($_POST['amount'][$r] + ($_POST['other_cur_paid'][$r] / $cur_rate->rate)));
-						$pos_b += ($_POST['amount'][$j] + ($_POST['other_cur_paid'][$j]/$cur_rate->rate));
-						$paidi  = ($_POST['amount'][$j] + ($_POST['other_cur_paid'][$j]/$cur_rate->rate));
+                        $pos_b += ($_POST['amount'][$j] + ($_POST['other_cur_paid'][$j]/$cur_rate->rate));
+                        $paidi  = ($_POST['amount'][$j] + ($_POST['other_cur_paid'][$j]/$cur_rate->rate));
 
                         if ($pos_a < $g_total) {
                             $amount = $paidi;
@@ -812,38 +842,38 @@ class Pos extends MY_Controller
                             $amount = $g_total - ($pos_a - $paidi);
                         }
 
-						if (isset($_POST['other_cur_paid'][$j]) && !empty($_POST['other_cur_paid'][$j]) && isset($_POST['paid_by'][$j]) && !empty($_POST['paid_by'][$j])) {
-							$payment[] = array(
-								'biller_id'				=> $biller_id,
-								'date' 					=> $date,
-								'reference_no' 			=> (($_POST['paid_by'][$j] == 'deposit' || $_POST['paid_by'][$j] == 'depreciation')? $reference : $this->site->getReference('sp')),
+                        if (isset($_POST['other_cur_paid'][$j]) && !empty($_POST['other_cur_paid'][$j]) && isset($_POST['paid_by'][$j]) && !empty($_POST['paid_by'][$j])) {
+                            $payment[] = array(
+                                'biller_id'				=> $biller_id,
+                                'date' 					=> $date,
+                                'reference_no' 			=> (($_POST['paid_by'][$j] == 'deposit' || $_POST['paid_by'][$j] == 'depreciation')? $reference : $this->site->getReference('sp')),
                                 'amount' => $this->erp->formatDecimal($amount),
-								'paid_by' 				=> $_POST['paid_by'][$j],
-								'cheque_no' 			=> $_POST['cheque_no'][$j],
-								'cc_no' 				=> ($_POST['paid_by'][$j] == 'gift_card' ? $_POST['paying_gift_card_no'][$j] : $_POST['cc_no'][$j]),
-								'cc_holder' 			=> $_POST['cc_holder'][$j],
-								'cc_month' 				=> $_POST['cc_month'][$j],
-								'cc_year' 				=> $_POST['cc_year'][$j],
-								'cc_type' 				=> $_POST['cc_type'][$j],
-								'cc_cvv2' 				=> $_POST['cc_cvv2'][$j],
-								'created_by' 			=> $this->session->userdata('user_id'),
-								'type' 					=> 'received',
-								'note' 					=> $_POST['payment_note'][$j],
-								'pos_paid' 				=> $_POST['amount'][$j],
-								'pos_balance' 			=> ($this->erp->formatDecimal($pos_b) - $this->erp->formatDecimal($grand_total)),
-								'pos_paid_other' 		=> $_POST['other_cur_paid'][$j],
-								'pos_paid_other_rate' 	=> $cur_rate->rate,
-								'bank_account' 			=> $bank_account[$j]
-							);
-							
-							$pp[] = $paidd;
-					
-							if($_POST['paid_by'][0] != 'deposit' && $_POST['paid_by'][0] != 'depreciation') {
-								$this->site->updateReference('sp');
-							}
-						}
-					}
-                }
+                                'paid_by' 				=> $_POST['paid_by'][$j],
+                                'cheque_no' 			=> $_POST['cheque_no'][$j],
+                                'cc_no' 				=> ($_POST['paid_by'][$j] == 'gift_card' ? $_POST['paying_gift_card_no'][$j] : $_POST['cc_no'][$j]),
+                                'cc_holder' 			=> $_POST['cc_holder'][$j],
+                                'cc_month' 				=> $_POST['cc_month'][$j],
+                                'cc_year' 				=> $_POST['cc_year'][$j],
+                                'cc_type' 				=> $_POST['cc_type'][$j],
+                                'cc_cvv2' 				=> $_POST['cc_cvv2'][$j],
+                                'created_by' 			=> $this->session->userdata('user_id'),
+                                'type' 					=> 'received',
+                                'note' 					=> $_POST['payment_note'][$j],
+                                'pos_paid' 				=> $_POST['amount'][$j],
+                                'pos_balance' 			=> ($this->erp->formatDecimal($pos_b) - $this->erp->formatDecimal($grand_total)),
+                                'pos_paid_other' 		=> $_POST['other_cur_paid'][$j],
+                                'pos_paid_other_rate' 	=> $cur_rate->rate,
+                                'bank_account' 			=> $bank_account[$j]
+                            );
+
+                            $pp[] = $paidd;
+
+                            if($_POST['paid_by'][0] != 'deposit' && $_POST['paid_by'][0] != 'depreciation') {
+                                $this->site->updateReference('sp');
+                            }
+                        }
+                    }
+                }*/
 				
 				if($kh_paid == true){
 					if (!empty($pp)) {
