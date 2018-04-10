@@ -724,23 +724,33 @@ class Pos extends MY_Controller
 			}else{
 				$loans = array();
 			}
-			$amount = 0;
-			$kh_paid = false;
-			
+            $amount = 0;
+            $kh_paid = false;
+            $pos_a = 0;
+            $pos_b = 0;
+
             if (!$suspend) {
                 $p 		= isset($_POST['amount']) ? sizeof($_POST['amount']) : 0;
 				$p_cur 	= isset($_POST['other_cur_paid']) ? sizeof($_POST['other_cur_paid']) : 0;
-				
+                $g_total = $this->erp->formatDecimal($grand_total);
                 for ($r = 0; $r < $p; $r++) {
+                    $pos_a += $this->erp->formatDecimal(($_POST['amount'][$r] + ($_POST['other_cur_paid'][$r] / $cur_rate->rate)));
 					$pos_b += ($_POST['amount'][$r] + ($_POST['other_cur_paid'][$r]/$cur_rate->rate));
 					$paid  = ($_POST['amount'][$r] + ($_POST['other_cur_paid'][$r]/$cur_rate->rate));
+
+                    if ($pos_a < $g_total) {
+                        $amount = $paid;
+                    } else {
+                        $amount = $g_total - ($pos_a - $paid);
+                    }
+
                     if (isset($_POST['amount'][$r]) && !empty($_POST['amount'][$r]) && isset($_POST['paid_by'][$r]) && !empty($_POST['paid_by'][$r])) {
 						if(strpos($_POST['amount'][$r], '-') !== false){
 							$payment[] = array(
 								'biller_id'				=> $biller_id,
 								'date' 					=> $date,
 								'reference_no' 			=> (($_POST['paid_by'][$r] == 'deposit' || $_POST['paid_by'][$r] == 'depreciation')? $reference : $this->site->getReference('sp')),
-								'amount' 				=> $this->erp->formatDecimal($paid),
+                                'amount' => $this->erp->formatDecimal($amount),
 								'paid_by' 				=> $_POST['paid_by'][$r],
                                 'cheque_no' 			=> $_POST['cheque_no'][$r],
 								'cc_no' 				=> ($_POST['paid_by'][$r] == 'gift_card' ? $_POST['paying_gift_card_no'][$r] : $_POST['cc_no'][$r]),
@@ -763,7 +773,7 @@ class Pos extends MY_Controller
 								'biller_id'				=> $biller_id,
 								'date' 					=> $date,
 								'reference_no' 			=> (($_POST['paid_by'][$r] == 'deposit' || $_POST['paid_by'][$r] == 'depreciation')? $reference : $this->site->getReference('sp')),
-								'amount' 				=> $this->erp->formatDecimal($paid),
+                                'amount' => $this->erp->formatDecimal($amount),
 								'paid_by' 				=> $_POST['paid_by'][$r],
 								'cheque_no' 			=> $_POST['cheque_no'][$r],
 								'cc_no' 				=> ($_POST['paid_by'][$r] == 'gift_card' ? $_POST['paying_gift_card_no'][$r] : $_POST['cc_no'][$r]),
@@ -791,15 +801,24 @@ class Pos extends MY_Controller
 				
 				if(isset($p_cur) && empty($_POST['amount'][0])){
 					$kh_paid = true;
+                    $g_total = $this->erp->formatDecimal($grand_total);
 					for ($j = 0; $j < $p_cur; $j++) {
+                        $pos_a += $this->erp->formatDecimal(($_POST['amount'][$r] + ($_POST['other_cur_paid'][$r] / $cur_rate->rate)));
 						$pos_b += ($_POST['amount'][$j] + ($_POST['other_cur_paid'][$j]/$cur_rate->rate));
 						$paidi  = ($_POST['amount'][$j] + ($_POST['other_cur_paid'][$j]/$cur_rate->rate));
+
+                        if ($pos_a < $g_total) {
+                            $amount = $paidi;
+                        } else {
+                            $amount = $g_total - ($pos_a - $paidi);
+                        }
+
 						if (isset($_POST['other_cur_paid'][$j]) && !empty($_POST['other_cur_paid'][$j]) && isset($_POST['paid_by'][$j]) && !empty($_POST['paid_by'][$j])) {
 							$payment[] = array(
 								'biller_id'				=> $biller_id,
 								'date' 					=> $date,
 								'reference_no' 			=> (($_POST['paid_by'][$j] == 'deposit' || $_POST['paid_by'][$j] == 'depreciation')? $reference : $this->site->getReference('sp')),
-								'amount' 				=> $this->erp->formatDecimal($paidi),
+                                'amount' => $this->erp->formatDecimal($amount),
 								'paid_by' 				=> $_POST['paid_by'][$j],
 								'cheque_no' 			=> $_POST['cheque_no'][$j],
 								'cc_no' 				=> ($_POST['paid_by'][$j] == 'gift_card' ? $_POST['paying_gift_card_no'][$j] : $_POST['cc_no'][$j]),
