@@ -1,4 +1,5 @@
 <?php
+
 function product_name($name)
 {
     return character_limiter($name, (isset($pos_settings->char_per_line) ? ($pos_settings->char_per_line-8) : 35));
@@ -415,8 +416,11 @@ if ($modal) {
 				<p>===============================</p>
 				<p>Free WIFI access code:</p>
 				<p><?=$biller->wifi_code ?></p>
-			</div>
 
+			</div>
+            <span class="col-xs-12 no-print">
+				<a class="btn btn-block btn-warning" href="<?= site_url('pos'); ?>"><?= lang("back_to_pos"); ?></a>
+			</span>
 	<script type="text/javascript" src="<?= $assets ?>pos/js/jquery-1.7.2.min.js"></script>
 	<?php if ($pos_settings->java_applet) {
         function drawLine()
