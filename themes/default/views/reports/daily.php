@@ -70,6 +70,11 @@
                     </a>
                 </li>
                 <li class="dropdown">
+                    <a href="#" id="xls" class="tip" title="<?= lang('download_excel') ?>">
+                        <i class="icon fa fa-file-excel-o"></i>
+                    </a>
+                </li>
+                <li class="dropdown">
                     <a href="#" id="image" class="tip" title="<?= lang('save_image') ?>">
                         <i class="icon fa fa-file-picture-o"></i>
                     </a>
@@ -110,7 +115,7 @@
             event.preventDefault();
             html2canvas($('.box'), {
                 onrendered: function (canvas) {
-                    var img = canvas.toDataURL()
+                    var img = canvas.toDataURL();
                     window.open(img);
                 }
             });

@@ -42,6 +42,11 @@
                     </a>
                 </li>
                 <li class="dropdown">
+                    <a href="#" id="excel" class="tip" title="<?= lang('download_excel') ?>">
+                        <i class="icon fa fa-file-excel-o"></i>
+                    </a>
+                </li>
+                <li class="dropdown">
                     <a href="#" id="image" class="tip" title="<?= lang('save_image') ?>">
                         <i class="icon fa fa-file-picture-o"></i>
                     </a>
@@ -182,11 +187,16 @@
             window.location.href = "<?=site_url('reports/monthly_sales/'.$year.'/pdf')?>";
             return false;
         });
+        $('#excel').click(function (event) {
+            event.preventDefault();
+            window.location.href = "<?=site_url('reports/monthly_sales_action/' . $year . '/excel')?>";
+            return false;
+        });
         $('#image').click(function (event) {
             event.preventDefault();
             html2canvas($('.box'), {
                 onrendered: function (canvas) {
-                    var img = canvas.toDataURL()
+                    var img = canvas.toDataURL();
                     window.open(img);
                 }
             });
