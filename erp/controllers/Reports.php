@@ -22231,6 +22231,19 @@ function customers_actions($wh=null) {
             $this->excel->getActiveSheet()->SetCellValue('B1', lang('product_name'));
             $this->excel->getActiveSheet()->getStyle('A')->getFont()->setBold(true);
             $this->excel->getActiveSheet()->getStyle('A')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+            $this->excel->getActiveSheet()->getStyle('A1:B1')->getFont()
+                ->setName('Times New Roman')
+                ->setSize(16);
+            if ($pdf) {
+                $styleArray1 = array(
+                    'borders' => array(
+                        'allborders' => array(
+                            'style' => PHPExcel_Style_Border::BORDER_THIN
+                        )
+                    )
+                );
+                $this->excel->getActiveSheet()->getStyle('A1:B1')->applyFromArray($styleArray1);
+            }
 
             $days = cal_days_in_month(CAL_GREGORIAN,$month,$year);
             for($i=1;$i<=$days;$i++){
@@ -22238,6 +22251,19 @@ function customers_actions($wh=null) {
                 $this->excel->getActiveSheet()->getColumnDimension($alphabet2[$i])->setWidth(15);
                 $this->excel->getActiveSheet()->getStyle($alphabet1[$i])->getFont()->setBold(true);
                 $this->excel->getActiveSheet()->getStyle($alphabet1[$i])->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                $this->excel->getActiveSheet()->getStyle($alphabet1[$i])->getFont()
+                    ->setName('Times New Roman')
+                    ->setSize(16);
+                if ($pdf) {
+                    $styleArray1 = array(
+                        'borders' => array(
+                            'allborders' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN
+                            )
+                        )
+                    );
+                    $this->excel->getActiveSheet()->getStyle($alphabet1[$i])->applyFromArray($styleArray1);
+                }
             }
            
            
@@ -22249,6 +22275,20 @@ function customers_actions($wh=null) {
             foreach($stocks as $row){
                 $this->excel->getActiveSheet()->SetCellValue('A'.$r, $row->code?$row->code:'ID:'.$row->product_id);
                 $this->excel->getActiveSheet()->SetCellValue('B'.$r, $row->name);
+                $this->excel->getActiveSheet()->getStyle('A' . $r . ':B' . $r)->getFont()
+                    ->setName('Times New Roman')
+                    ->setSize(16);
+                $this->excel->getActiveSheet()->getStyle('A' . $r . ':B' . $r)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                if ($pdf) {
+                    $styleArray1 = array(
+                        'borders' => array(
+                            'allborders' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THIN
+                            )
+                        )
+                    );
+                    $this->excel->getActiveSheet()->getStyle('A' . $r . ':B' . $r)->applyFromArray($styleArray1);
+                }
 
 
                 $am = 0;
@@ -22334,6 +22374,21 @@ function customers_actions($wh=null) {
                         if($q2->inn || $q->outt){
                             if($am){
                                 $this->excel->getActiveSheet()->SetCellValue($alphabet2[$i].$r, $this->erp->formatDecimal($am));
+                                $this->excel->getActiveSheet()->getStyle($alphabet2[$i] . $r)->getFont()
+                                    ->setName('Times New Roman')
+                                    ->setSize(16);
+                                $this->excel->getActiveSheet()->getStyle($alphabet2[$i] . $r)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $this->excel->getActiveSheet()->getStyle($alphabet2[$i] . $r)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                if ($pdf) {
+                                    $styleArray1 = array(
+                                        'borders' => array(
+                                            'allborders' => array(
+                                                'style' => PHPExcel_Style_Border::BORDER_THIN
+                                            )
+                                        )
+                                    );
+                                    $this->excel->getActiveSheet()->getStyle($alphabet2[$i] . $r)->applyFromArray($styleArray1);
+                                }
                             }
                             //$total[$i] +=$am;   
                         }                     
@@ -22341,6 +22396,21 @@ function customers_actions($wh=null) {
                         if($q2->inn){
                             if($q2->inn){
                                 $this->excel->getActiveSheet()->SetCellValue($alphabet2[$i].$r, $this->erp->formatDecimal($q2->inn));
+                                $this->excel->getActiveSheet()->getStyle($alphabet2[$i] . $r)->getFont()
+                                    ->setName('Times New Roman')
+                                    ->setSize(16);
+                                $this->excel->getActiveSheet()->getStyle($alphabet2[$i] . $r)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $this->excel->getActiveSheet()->getStyle($alphabet2[$i] . $r)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                if ($pdf) {
+                                    $styleArray1 = array(
+                                        'borders' => array(
+                                            'allborders' => array(
+                                                'style' => PHPExcel_Style_Border::BORDER_THIN
+                                            )
+                                        )
+                                    );
+                                    $this->excel->getActiveSheet()->getStyle($alphabet2[$i] . $r)->applyFromArray($styleArray1);
+                                }
                             }
                             //$total[$i] +=$q2->inn;
                         }
@@ -22348,6 +22418,21 @@ function customers_actions($wh=null) {
                         if($q->outt){
                             if($q->outt){
                                 $this->excel->getActiveSheet()->SetCellValue($alphabet2[$i].$r, $this->erp->formatDecimal($q->outt));
+                                $this->excel->getActiveSheet()->getStyle($alphabet2[$i] . $r)->getFont()
+                                    ->setName('Times New Roman')
+                                    ->setSize(16);
+                                $this->excel->getActiveSheet()->getStyle($alphabet2[$i] . $r)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+                                $this->excel->getActiveSheet()->getStyle($alphabet2[$i] . $r)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+                                if ($pdf) {
+                                    $styleArray1 = array(
+                                        'borders' => array(
+                                            'allborders' => array(
+                                                'style' => PHPExcel_Style_Border::BORDER_THIN
+                                            )
+                                        )
+                                    );
+                                    $this->excel->getActiveSheet()->getStyle($alphabet2[$i] . $r)->applyFromArray($styleArray1);
+                                }
                             }
                             //$total[$i] +=$q->outt;
                         }
@@ -22356,33 +22441,15 @@ function customers_actions($wh=null) {
                 }
                 $r++;
             }
-            //Total :
-            // $this->excel->getActiveSheet()->SetCellValue('A'.$r, lang('total').": ");
-            // $this->excel->getActiveSheet()->mergeCells('A'.$r.':B'.$r);
-            // $this->excel->getActiveSheet()->getStyle('A'.$r)->getFont()->setBold(true);
-            // $this->excel->getActiveSheet()->getStyle('A'.$r)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_RIGHT);
 
-            // for($i=1;$i<=$days;$i++){
-                // if($total[$i]){
-                    // $this->excel->getActiveSheet()->SetCellValue($alphabet2[$i].$r, $this->erp->formatDecimal($total[$i]));
-                    // $this->excel->getActiveSheet()->getStyle($alphabet2[$i].$r)->getFont()->setBold(true);
-                // }
-                // $this->excel->getActiveSheet()->getStyle($alphabet2[1].$r.':'.$alphabet2[$i].$r)->getBorders()->getTop()->setBorderStyle(PHPExcel_Style_Border::BORDER_THIN);
-            // }
-           
-            //$r++;
-            //set colspan
-            $this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(15);
-            $this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(15);
+            $this->excel->getActiveSheet()->getColumnDimension('A')->setWidth(30);
+            $this->excel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+
+
 
             $filename = lang('product_daily_inout'). date('Y_m_d_H_i_s');
             $this->excel->getDefaultStyle()->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
             if ($pdf) {
-                $styleArray = array(
-                    'borders' => array('allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN))
-                );
-                $this->excel->getDefaultStyle()->applyFromArray($styleArray);
-                $this->excel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
                 require_once(APPPATH . "third_party" . DIRECTORY_SEPARATOR . "MPDF" . DIRECTORY_SEPARATOR . "mpdf.php");
                 $rendererName = PHPExcel_Settings::PDF_RENDERER_MPDF;
                 $rendererLibrary = 'MPDF';
@@ -22391,6 +22458,17 @@ function customers_actions($wh=null) {
                     die('Please set the $rendererName: ' . $rendererName . ' and $rendererLibraryPath: ' . $rendererLibraryPath . ' values' .
                         PHP_EOL . ' as appropriate for your directory structure');
                 }
+                $this->excel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+                $this->excel->getActiveSheet()->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
+                $this->excel->getActiveSheet()->getPageSetup()->setFitToPage(true);
+                $this->excel->getActiveSheet()->getPageSetup()->setFitToWidth(1);
+                $this->excel->getActiveSheet()->getPageSetup()->setFitToHeight(1);
+
+                //Margins:
+                $this->excel->getActiveSheet()->getPageMargins()->setTop(0.25);
+                $this->excel->getActiveSheet()->getPageMargins()->setRight(0.25);
+                $this->excel->getActiveSheet()->getPageMargins()->setLeft(0.25);
+                $this->excel->getActiveSheet()->getPageMargins()->setBottom(0.25);
 
                 header('Content-Type: application/pdf');
                 header('Content-Disposition: attachment;filename="' . $filename . '.pdf"');
@@ -22401,6 +22479,18 @@ function customers_actions($wh=null) {
                 exit();
             }
             if ($excel) {
+                $this->excel->getActiveSheet()->getPageSetup()->setOrientation(PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE);
+                $this->excel->getActiveSheet()->getPageSetup()->setPaperSize(PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4);
+                $this->excel->getActiveSheet()->getPageSetup()->setFitToPage(true);
+                $this->excel->getActiveSheet()->getPageSetup()->setFitToWidth(1);
+                $this->excel->getActiveSheet()->getPageSetup()->setFitToHeight(1);
+
+                //Margins:
+                $this->excel->getActiveSheet()->getPageMargins()->setTop(0.25);
+                $this->excel->getActiveSheet()->getPageMargins()->setRight(0.25);
+                $this->excel->getActiveSheet()->getPageMargins()->setLeft(0.25);
+                $this->excel->getActiveSheet()->getPageMargins()->setBottom(0.25);
+
                 ob_clean();
                 header('Content-Type: application/vnd.ms-excel');
                 header('Content-Disposition: attachment;filename="' . $filename . '.xls"');
