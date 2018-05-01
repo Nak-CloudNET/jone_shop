@@ -368,60 +368,12 @@
             <?php if (!$Supplier || !$Customer) { ?>
                 <div class="buttons">
                     <div class="btn-group btn-group-justified">
-						<div class="btn-group">
-                            <a href="<?= site_url('sale_order/tax_invoice1/' . $inv->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('tax_invoice1') ?>">
-                                <i class="fa fa-print"></i>
-                                <span class="hidden-sm hidden-xs"><?= lang('print_tax_invoice') ?></span>
-                            </a>
-                        </div>
-                        <?php if($so_id->id != 0){?>
-                        <div class="btn-group">
-                            <a href="<?= site_url('sale_order/tax_chales/' . $inv->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('tax_invoice1') ?>">
-                                <i class="fa fa-print"></i>
-                                <span class="hidden-sm hidden-xs"><?= lang('tax_invoice_charles') ?></span>
-                            </a>
-                        </div>
-                        <?php }?>
-						<!--
-						<div class="btn-group">
-                            <a href="<?= site_url('sales/print_hch/' . $inv->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('Print_HCH_Invoice') ?>">
-                                <i class="fa fa-print"></i>
-                                <span class="hidden-sm hidden-xs"><?= lang('Print_HCH_Invoice') ?></span>
-                            </a>
-                        </div>
-						-->
-						<div class="btn-group">
-                            <a href="<?= site_url('sale_order/invoice/' . $inv->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('invoice') ?>">
-                                <i class="fa fa-print"></i>
-                                <span class="hidden-sm hidden-xs"><?= lang('RMS Invoice') ?></span>
-                            </a>
-                        </div>
                         <div class="btn-group">
                             <a href="<?= site_url('sale_order/print_invoice/' . $inv->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('invoice') ?>">
                                 <i class="fa fa-print"></i>
                                 <span class="hidden-sm hidden-xs"><?= lang('print_invoice') ?></span>
                             </a>
                         </div>
-                        <div class="btn-group">
-                            <a href="<?= site_url('sale_order/invoice_order/' . $inv->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('invoice') ?>">
-                                <i class="fa fa-print"></i>
-                                <span class="hidden-sm hidden-xs"><?= lang('invoice') ?></span>
-                            </a>
-                        </div>
-						<!-- <div class="btn-group">
-							<a href="<?=base_url()?>sales/Sanagro_Invoice/<?=$inv->id?>" target="_blank" class="tip btn btn-primary" title="<?= lang('Sanagro_Invoice') ?>">
-								<i class="fa fa-print"></i>
-								<span class="hidden-sm hidden-xs"><?= lang('Sanagro_Invoice') ?></span>
-                            </a>
-                        </div> -->
-						<!--
-						<div class="btn-group">
-							<a href="<?=base_url()?>sales/cabon_print/<?=$inv->id?>" target="_blank" class="tip btn btn-primary" title="<?= lang('print_cabon') ?>">
-								<i class="fa fa-print"></i>
-								<span class="hidden-sm hidden-xs"><?= lang('print_cabon') ?></span>
-                            </a>
-                        </div>
-						-->
                         <div class="btn-group">
                             <a href="<?= site_url('sale_order/view/' . $inv->id) ?>" class="tip btn btn-primary" title="<?= lang('view') ?>">
                                 <i class="fa fa-file-text-o"></i>
@@ -441,12 +393,6 @@
                             <a href="<?= site_url('sales/email/' . $inv->id) ?>" data-toggle="modal" data-target="#myModal2" class="tip btn btn-primary" title="<?= lang('email') ?>">
                                 <i class="fa fa-envelope-o"></i>
                                 <span class="hidden-sm hidden-xs"><?= lang('email') ?></span>
-                            </a>
-                        </div>
-						<div class="btn-group">
-                            <a href="<?= site_url('sale_order/flora/' . $inv->id) ?>" target="_blank" class="tip btn btn-primary" title="<?= lang('flora') ?>">
-                                <i class="fa fa-print"></i>
-                                <span class="hidden-sm hidden-xs"><?= lang('flora') ?></span>
                             </a>
                         </div>
                         <?php if ($Owner || $Admin || $GP['sale_order-export']) { ?>
