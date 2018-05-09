@@ -943,6 +943,7 @@ class Pos extends MY_Controller
                         }
                     }
                     $this->session->set_flashdata('message', $msg);
+					/*
 					$sale_id = $this->sales_model->getInvoiceByID($sale['sale_id']);
 					$address = $customer_details->address . " " . $customer_details->city . " " . $customer_details->state . " " . $customer_details->postal_code . " " . $customer_details->country . "<br>Tel: " . $customer_details->phone . " Email: " . $customer_details->email;
 					$dlDetails = array(
@@ -962,7 +963,7 @@ class Pos extends MY_Controller
 					if($pos->auto_delivery == 1){
 						$this->sales_model->addDelivery($dlDetails);
 					}
-					
+					*/
                     redirect("pos/jones_invoice/" . $sale['sale_id']);
                     // redirect("pos/view/" . $sale['sale_id']);
                 }

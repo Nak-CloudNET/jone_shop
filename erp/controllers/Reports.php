@@ -22248,7 +22248,7 @@ function customers_actions($wh=null) {
             $days = cal_days_in_month(CAL_GREGORIAN,$month,$year);
             for($i=1;$i<=$days;$i++){
                 $this->excel->getActiveSheet()->SetCellValue($alphabet1[$i], $i);
-                $this->excel->getActiveSheet()->getColumnDimension($alphabet2[$i])->setWidth(15);
+                //$this->excel->getActiveSheet()->getColumnDimension($alphabet2[$i])->setWidth(15);
                 $this->excel->getActiveSheet()->getStyle($alphabet1[$i])->getFont()->setBold(true);
                 $this->excel->getActiveSheet()->getStyle($alphabet1[$i])->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
                 $this->excel->getActiveSheet()->getStyle($alphabet1[$i])->getFont()
