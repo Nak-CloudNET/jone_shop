@@ -416,6 +416,9 @@ class Pos extends MY_Controller
         $this->form_validation->set_rules('warehouse', $this->lang->line("warehouse"), 'required');
 		$this->form_validation->set_rules('date', $this->lang->line("date"));
         $this->form_validation->set_rules('biller', $this->lang->line("biller"), 'required');
+        if (!$suspend) {
+            $this->form_validation->set_rules('reference_nob', lang("reference_nob"), 'required|is_unique[sales.reference_no]');
+        }
 
         if ($this->form_validation->run() == true){
             
@@ -446,7 +449,7 @@ class Pos extends MY_Controller
             //$staff_note = $this->erp->clear_tags($this->input->post('staff_note'));
 			$suspend_room 		= $this->input->post('suspend_room');
 			$reference 			= $this->input->post('reference_nob');
-            $bank_account = $this->input->post('bank_account');
+            $bank_account       = $this->input->post('bank_account');
 
             if ($this->session->userdata('biller_id')) {
                 $default_biller = JSON_decode($this->session->userdata('biller_id'));
@@ -970,11 +973,11 @@ class Pos extends MY_Controller
             }
         }else {
 			//it may be run.
-            $this->data['suspend_sale'] = NULL;
-            $this->data['type']     = 0;
-            $this->data['type_id']  = 0;
-            $this->data['sale_order_id'] = 0;
-			$this->data['combine_table'] = 0;
+            $this->data['suspend_sale']     = NULL;
+            $this->data['type']             = 0;
+            $this->data['type_id']          = 0;
+            $this->data['sale_order_id']    = 0;
+			$this->data['combine_table']    = 0;
             if ($sid) {
                 $suspended_sale = $this->pos_model->getOpenBillByID($sid);
 				if($suspended_sale){
@@ -1267,12 +1270,12 @@ class Pos extends MY_Controller
 				$biller = $this->site->getCompanyByID($this->Settings->default_biller);
 			}
 
-            $this->data['wifi_code'] = $biller->wifi_code;
-            $this->data['bill_addr'] = $biller->address;
-            $this->data['phone']     = $biller->phone;
-            $this->data['email']     = $biller->email;
-            $this->data['vat_no']     = $biller->vat_no;
-			$this->data['invoice_footer']     = $biller->invoice_footer;
+            $this->data['wifi_code']        = $biller->wifi_code;
+            $this->data['bill_addr']        = $biller->address;
+            $this->data['phone']            = $biller->phone;
+            $this->data['email']            = $biller->email;
+            $this->data['vat_no']           = $biller->vat_no;
+			$this->data['invoice_footer']   = $biller->invoice_footer;
             
             $this->load->view($this->theme . 'pos/add', $this->data);
         }
