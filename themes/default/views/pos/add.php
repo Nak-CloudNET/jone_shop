@@ -3598,6 +3598,7 @@ var lang = {unexpected_value: '<?=lang('unexpected_value');?>', select_above: '<
                 $('#open-subcategory').click();
                 $('#modal-loading').show();
                 sub_cat_id = $(this).val();
+                p_page = 'n';
                 $.ajax({
                     type: "get",
                     url: "<?= site_url('pos/ajaxproducts'); ?>",
@@ -3607,10 +3608,11 @@ var lang = {unexpected_value: '<?=lang('unexpected_value');?>', select_above: '<
                         $('#slide_item').hide();
                         var newPrs = $('<div id=box-item ></div>');
                         newPrs.html(data);
+
                         newPrs.appendTo("#item-list");
                     }
                 }).done(function () {
-                    p_page = 'n';
+
                     $('#subcategory-' + sub_cat_id).addClass('active');
                     $('#subcategory-' + osub_cat_id).removeClass('active');
                     $('#modal-loading').hide();
