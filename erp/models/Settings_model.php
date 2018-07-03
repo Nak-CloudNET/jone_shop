@@ -649,6 +649,7 @@ class Settings_model extends CI_Model
             'category_id' => $data['category'],
             'code' => $data['code'],
             'name' => $data['name'],
+            'type'  =>$data['type'],
         );
         if ($photo) {
             $categoryData['image'] = $photo;
