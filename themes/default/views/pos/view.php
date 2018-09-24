@@ -913,11 +913,11 @@ if ($modal) {
          <?php if (!$pos_settings->java_applet) { ?>
 			$(window).load(function () {
 				window.print();
-				<?php
-				if($Settings->auto_print){?>
+				<?php if($Settings->auto_print){?>
 					setTimeout('window.close()', 5000);
-					document.location.href = "<?=base_url()?>pos"; 
+					document.location.href = "<?=base_url()?>pos";
 				<?php }	?>
+
 			});
     <?php } ?>
             </script>

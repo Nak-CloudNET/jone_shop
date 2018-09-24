@@ -590,7 +590,7 @@ if ($modal) {
 				window.print();
 				<?php if($Settings->auto_print){ ?>
 					setTimeout('window.close()', 5000);
-					document.location.href = "<?=base_url()?>pos"; 
+					//document.location.href = "<?=base_url()?>pos";
 				<?php }	?>
 			});
 		<?php } ?>

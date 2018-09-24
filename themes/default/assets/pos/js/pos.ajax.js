@@ -1589,8 +1589,11 @@ function loadItems() {
 			bill_totals += '<tr><td colspan="3" style="font-family: MS Reference Sans Serif; font-size: 13px; border-bottom: 1px solid #000 !important">Order Tax</td>';
 			bill_totals += '<td style="text-align:right; border-bottom: 1px solid #000 !important"></td><td style="text-align:right;font-family: MS Reference Sans Serif; font-size: 13px; border-bottom: 1px solid #000 !important">( '+ tax_name +' ) $ '+formatMoney(total_tax)+'</td></tr>';
 
-			bill_totals += '<tr><td colspan="3" style="font-family: MS Reference Sans Serif; font-size: 16px; border-bottom: 1px solid #000 !important"><b>Amount To Be Paid</b></td>';
+			bill_totals += '<tr><td colspan="3" style="font-family: MS Reference Sans Serif; font-size: 16px; border-bottom: 1px solid #000 !important;width:60%"><b>Amount To Be Paid (USD)</b></td>';
 			bill_totals += '<td style="text-align:right; border-bottom: 1px solid #000 !important"></td><td style="text-align:right;font-family: MS Reference Sans Serif; font-size: 16px; border-bottom: 1px solid #000 !important"><b>$ '+formatMoney(gtotal)+'</b></td></tr>';
+
+			bill_totals += '<tr><td colspan="3" style="font-family: MS Reference Sans Serif; font-size: 16px; border-bottom: 1px solid #000 !important;width:60%"><b>Amount To Be Paid (រៀល)</b></td>';
+			bill_totals += '<td style="text-align:right; border-bottom: 1px solid #000 !important"></td><td style="text-align:right;font-family: MS Reference Sans Serif; font-size: 16px; border-bottom: 1px solid #000 !important"><b> '+formatMoney(gtotal*kh_rate)+' រៀល</b></td></tr>';
 
 			bill_totals += '<tr><td colspan="5" style="text-align:center; font-family: MS Reference Sans Serif;"><h5>Thank you! Please come again.</h5></td></tr>';
 			bill_totals += '<tr><td colspan="5" style="text-align:center; font-family: MS Reference Sans Serif; font-size: 13px;"><p>Please visit us at <b><u>jonesthegrocer.com</u><b></p></td></tr>';
