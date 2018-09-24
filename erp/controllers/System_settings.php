@@ -2159,7 +2159,6 @@ class system_settings extends MY_Controller
         $this->form_validation->set_rules('userfile', lang("category_image"), 'xss_clean');
 
         if ($this->form_validation->run() == true) {
-
             $data = array(
                 'category' => $this->input->post('category'),
                 'code' => $this->input->post('code'),
@@ -2227,7 +2226,7 @@ class system_settings extends MY_Controller
             redirect("system_settings/categories");
         } else {
              $this->data['error'] = validation_errors() ? validation_errors() : $this->session->flashdata('error');
-            $category = $this->settings_model->getCategoryByID($id);
+            $category = $this->settings_model->getSubCategoryByID($id);
             $this->data['name'] = array('name' => 'name',
                 'id' => 'name',
                 'type' => 'text',

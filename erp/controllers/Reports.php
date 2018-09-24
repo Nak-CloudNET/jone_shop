@@ -3375,7 +3375,7 @@ class Reports extends MY_Controller
 		echo $this->datatables->generate();
     }
 
-    function getCategoriesReport($pdf = NULL, $xls = NULL)
+	   function getCategoriesReport($pdf = NULL, $xls = NULL)
     {
 		
         if ($this->input->get('category')) {
@@ -3455,12 +3455,12 @@ class Reports extends MY_Controller
 					$pp = "( SELECT pp.category_id as category, pi.product_id, SUM( pi.quantity ) purchasedQty, SUM( pi.net_unit_cost * pi.quantity ) totalPurchase, p.date as pdate from " . $this->db->dbprefix('products') . " pp
 					left JOIN " . $this->db->dbprefix('purchase_items') . " pi on pp.id = pi.product_id
 					left join " . $this->db->dbprefix('purchases') . " p ON p.id = pi.purchase_id
-					where p.date >= '$start_date' AND p.date <= '$end_date'  group by pp.category_id 
+					where p.date >= '$start_date 00:00:00' AND p.date <= '$end_date 23:59:00'  group by pp.category_id 
 					) PCosts";
 					$sp = "( SELECT sp.category_id as category, si.product_id, SUM( si.quantity ) soldQty, SUM( si.subtotal ) totalSale, s.date as sdate from " . $this->db->dbprefix('products') . " sp
 					left JOIN " . $this->db->dbprefix('sale_items') . " si on sp.id = si.product_id
 					left join " . $this->db->dbprefix('sales') . " s ON s.id = si.sale_id
-					where s.date >= '$start_date2' and s.date <= '$end_date2'  group by sp.category_id 
+					where s.date >= '$start_date2 00:00:00' and s.date <= '$end_date2 23:59:00'  group by sp.category_id 
 					) PSales";
 				}
 			}
@@ -13098,7 +13098,6 @@ class Reports extends MY_Controller
 		$wid = $this->reports_model->getWareByUserID();
 		$this->data['warefull'] = $this->reports_model->getWareFullByUSER($wid);
 		$this->data['biller_idd'] = $this->reports_model->getBiilerByUserID();
-		//$this->erp->print_arrays($this->data);
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => site_url('reports'), 'page' => lang('reports')), array('link' => '#', 'page' => lang('categories_report')));
         $meta = array('page_title' => lang('categories_report'), 'bc' => $bc);
         $this->page_construct('reports/categories', $meta, $this->data);
