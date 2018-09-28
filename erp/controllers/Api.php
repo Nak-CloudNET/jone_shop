@@ -11,9 +11,9 @@ class Api extends MY_Controller
         $this->load->library('ion_auth');
     }
 
-    function aeon($start_date, $end_date, $biller_id = null)
+    function aeon($start_date, $start_time=NULL,$end_date,$end_time=NULL, $biller_id = null)
     {
-		$data = json_encode($this->api_model->getPaymentData($start_date, $end_date, $biller_id), JSON_NUMERIC_CHECK);
+		$data = json_encode($this->api_model->getPaymentData($start_date,$start_time,$end_date,$end_time, $biller_id), JSON_NUMERIC_CHECK);
 		echo $data;
     }
 

@@ -8,14 +8,17 @@ class Api_model extends CI_Model
         parent::__construct();
     }
 	
-	public function getPaymentData($start_date, $end_date, $biller_id = null)
+	public function getPaymentData($start_date,$start_time=NULL, $end_date,$end_time=NULL, $biller_id = null)
 	{
-        if (!(is_a($start_date, 'DateTime'))) {
-            $start_date=$start_date." 00:00:00";
+        if ($start_time==0 || $start_time=="" || $start_time==null) {
+            $start_time="00:00:00";
         }
-        if (!(is_a($end_date, 'DateTime'))) {
-            $end_date=$end_date." 23:59:59";
+        if ($end_time==0 || $end_time=="" || $end_time==null) {
+            $end_time="23:59:59";
         }
+
+        $start_date = $start_date." ".$start_time;
+        $end_date   = $end_date." ".$end_time;
 		$this->db->select("
 					payments.id as TransactionID,
 					sales.reference_no as InvoiceID,
@@ -52,7 +55,7 @@ class Api_model extends CI_Model
 		if($biller_id) {
 			$this->db->where('payments.biller_id', $biller_id);
 		}
-		$this->db->group_by('payments.id, payments.sale_ida');
+		$this->db->group_by('payments.id, payments.sale_id');
 		$q = $this->db->get('payments');
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {
