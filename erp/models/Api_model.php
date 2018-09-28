@@ -10,6 +10,12 @@ class Api_model extends CI_Model
 	
 	public function getPaymentData($start_date, $end_date, $biller_id = null)
 	{
+        if (!(is_a($start_date, 'DateTime'))) {
+            $start_date=$start_date." 00:00:00";
+        }
+        if (!(is_a($end_date, 'DateTime'))) {
+            $end_date=$end_date." 23:59:59";
+        }
 		$this->db->select("
 					payments.id as TransactionID,
 					sales.reference_no as InvoiceID,
@@ -46,7 +52,7 @@ class Api_model extends CI_Model
 		if($biller_id) {
 			$this->db->where('payments.biller_id', $biller_id);
 		}
-		$this->db->group_by('payments.id, payments.sale_id');
+		$this->db->group_by('payments.id, payments.sale_ida');
 		$q = $this->db->get('payments');
         if ($q->num_rows() > 0) {
             foreach (($q->result()) as $row) {

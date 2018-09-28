@@ -967,7 +967,9 @@ class Pos extends MY_Controller
 						$this->sales_model->addDelivery($dlDetails);
 					}
 					*/
-                    redirect("pos/jones_invoice/" . $sale['sale_id']);
+                    //redirect("pos/jones_invoice/" . $sale['sale_id']);
+                    redirect("pos");
+                     $this->session->set_flashdata('message', 'success add');
                     // redirect("pos/view/" . $sale['sale_id']);
                 }
             }
