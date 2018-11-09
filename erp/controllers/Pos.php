@@ -671,7 +671,11 @@ class Pos extends MY_Controller
             } else {
                 $query = $i;
             }
-            
+            if($reference=="" || $reference==NULL || empty($reference))
+            {
+                $this->session->set_flashdata('error', 'Refrence can not be null!');
+                redirect($_SERVER["HTTP_REFERER"]);
+            }
             $data = array(
                 'date'              => $date,
                 'reference_no'      => $reference,
@@ -709,7 +713,6 @@ class Pos extends MY_Controller
 				'type_id'           => $this->input->post('sale_type_id'),
 				'queue'           	=> $query
             );
-            
 			
 			if($_POST['paid_by'][0] == 'depreciation'){
 				$no = sizeof($_POST['no']);
