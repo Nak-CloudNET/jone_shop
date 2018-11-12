@@ -95,7 +95,7 @@ if ($q->num_rows() > 0) {
 		$arrSuspend[$row->id]['suspend_name']   = $row->suspend_name;
 		//echo $row->total;exit;
     }
-} 
+}
 ?>
 <div id="wrapper">
     <header id="header" class="navbar">
@@ -573,7 +573,7 @@ if ($q->num_rows() > 0) {
                         </div>
 						<div style="clear:both;"></div>
 					<?php } ?>
-						<input type="hidden" id="reference_no" value="<?= $reference ?>">
+						<input type="hidden" id="reference_no" value="<?= $reference ?>" required>
                         <div id="print">
                             <div id="left-middle">
                                 <div id="product-list">
@@ -625,7 +625,7 @@ if ($q->num_rows() > 0) {
                                         <td style="padding: 5px 10px; font-size: 16px;"><?= lang('total'); ?></td>
                                         <td class="text-right" style="padding: 5px 10px;font-size: 16px; font-weight:bold;">
                                             <span id="total">0.00</span>
-                                        </td>
+                                        </td>​
 										
                                     </tr>
                                     <tr>
@@ -666,9 +666,9 @@ if ($q->num_rows() > 0) {
 									
 									<input type="hidden" name="saleman_1" id="saleman_1" value=""/>
 									<input type="hidden" name="delivery_by_1" id="delivery_by_1" value=""/>
-									<input type="hidden" name="reference_nob" id="reference_nob" value=""/>
+									<input type="hidden" name="reference_nob" id="reference_nob" value="" required />
 									<input type="hidden" name="sale_status" id="sale_status_1" value=""/>
-									<input type="hidden" name="address" id="address" value=""/>	   
+									<input type="hidden" name="address" id="address" value=""/>
 									<input type="hidden" name="date" value="" class="date_c">
 									<input type="hidden" name="sale_type" value="<?= $type; ?>" class="sale_type">
 									<input type="hidden" name="sale_type_id" value="<?= $type_id; ?>" class="sale_type_id">
@@ -1423,8 +1423,8 @@ if ($q->num_rows() > 0) {
 									<div style="float:left;width:100%;">
 										<div class="form-group">
 											<div class="input-group">  
-													<?php echo form_input('reference_no', $reference?$reference:"",'  class="form-control input-tip" id="slref"'); ?>
-													<input type="hidden"  name="temp_reference_no"  id="temp_reference_no" value="<?= $reference?$reference:"" ?>" />
+													<?php echo form_input('reference_no', $reference?$reference:"",'  class="form-control input-tip" id="slref" required'); ?>
+													<input type="hidden"  name="temp_reference_no" id="temp_reference_no" value="<?= $reference?$reference:"" ?>" required />
 												<div class="input-group-addon no-print" style="padding: 2px 5px;background-color:white;">
 													<input type="checkbox" name="ref_status" id="ref_st" value="1" style="margin-top:3px;">
 												</div>
@@ -2038,7 +2038,7 @@ if ($q->num_rows() > 0) {
                             <input type="hidden" class="form-control kb-pad" id="pprice">
 							<input type="text" class="form-control kb-pad" id="pprice_show">
 							<input type="hidden" class="form-control" id="own_rate">
-							<input type="hidden" class="form-control" id="setting_rate">
+					 		<input type="hidden" class="form-control" id="setting_rate">
 							<input type="hidden" class="form-control" value="" id="cost">
 							<input type="hidden" class="form-control" value="<?= base_url() ?>" id="img_url">
 							<input type="hidden" class="form-control" value="<?= $bill_addr ?>" id="bill_addr">
@@ -2536,7 +2536,7 @@ if ($q->num_rows() > 0) {
 
                 <div class="form-group suspend-add">
                     <?= lang("reference_note", "reference_note"); ?>
-                    <input type="hidden" id="reference_note" class="form-control kb-text" value="" name="reference_note">
+                    <input type="hidden" id="reference_note" class="form-control kb-text" value="" name="reference_note" required>
                     <?php //echo form_input('reference_note', $reference_note, 'class="form-control kb-text" id="reference_note" style="display: none;"'); ?>
                 </div>
                 <div class="form-group">
@@ -2921,12 +2921,13 @@ var lang = {unexpected_value: '<?=lang('unexpected_value');?>', select_above: '<
 
 		<?php }
 		?>
+
         $('#payment').click(function () {
             var GP = '<?= $GP['sales-discount'];?>';
 			var Owner = '<?= $Owner?>';
 			var Admin = '<?= $Admin?>';
 			var user_log = '<?= $this->session->userdata('user_id');?>';
-			
+            // var quick_payable = $('#gtotal').val();
 			if(localStorage.getItem('addre')){
 				$("#sale_note").attr("value", localStorage.getItem('addre'));
 				var nott = $("#sale_note").val();
@@ -2939,13 +2940,15 @@ var lang = {unexpected_value: '<?=lang('unexpected_value');?>', select_above: '<
 				suspend.html('<input type="hidden" name="delete_id" value="<?php echo $sid; ?>" />');
 				suspend.appendTo("#hidesuspend");
 				<?php } ?>
-				var twt = formatDecimal((total + total_tax) - order_discount); 
+				var twt = formatDecimal((total + total_tax) - order_discount);
+
 				if (an == 1) {
 					bootbox.alert('<?= lang('x_total'); ?>');
 					return false;
 				}
 
 				gtotal = formatDecimal(twt);
+                var quick_payment = $('#gtotal').text();
 				<?php if($pos_settings->rounding) { ?>
 				
 				round_total = roundNumber(gtotal, <?=$pos_settings->rounding?>);
@@ -2956,9 +2959,9 @@ var lang = {unexpected_value: '<?=lang('unexpected_value');?>', select_above: '<
 				$('#quick-payable').text(round_total);
 				$('#payable_amount').val(round_total);
 				<?php } else { ?>
-				$('#twt').text(formatMoney(gtotal));
-				$('#quick-payable').text(gtotal);
-				$('#payable_amount').val(gtotal);
+				$('#twt').text(formatMoney(quick_payment));
+				$('#quick-payable').text(quick_payment);
+				$('#payable_amount').val(quick_payment);
 				<?php } ?>
 				$('#product_note').val($('#get_not').text());
 				$('#item_count').text(count - 1);
@@ -2974,8 +2977,7 @@ var lang = {unexpected_value: '<?=lang('unexpected_value');?>', select_above: '<
 				$("#date").trigger('change');
 				$("#saleman").trigger('change');
 				$("#delivery_by").trigger('change');
-				
-				
+
 				autoCalcurrencies(gtotal);
 			}else{
 				var val = '';
@@ -3332,14 +3334,14 @@ var lang = {unexpected_value: '<?=lang('unexpected_value');?>', select_above: '<
             $(".curr_balance").each(function(i){
                 var rate = $(this).attr('rate');
                 if(!isNaN(total_paying)){
-                    var b = formatMoney((total_paying -gtotal) * rate);
+                    var b = formatMoney((total_paying - gtotal) * rate);
                     $(this).html(b);
 					b = b.replace('-', '');
 					//$("#other_cur_paid").val(b);
                 }else{
 					//$(this).html(formatMoney(0));
 					//$("#other_cur_paid").val('');
-				}     
+				}
             });
             total_paid = total_paying;
             grand_total = gtotal;
@@ -3449,9 +3451,9 @@ var lang = {unexpected_value: '<?=lang('unexpected_value');?>', select_above: '<
 							}
 						}
 					});
-                /*********add autocomplete prepend item********/               
+                /*********add autocomplete prepend item********/
                 if (ui.item.id !== 0) {
-                    var row = add_invoice_item(ui.item);                    
+                    var row = add_invoice_item(ui.item);
                     if (row)
                         $(this).val('');
                 } else {
@@ -6747,6 +6749,7 @@ $(document).ready(function(){
 	  if ($(this).is(':checked')) {
 		$("#slref").prop('readonly', false);
 		$("#slref").val("");
+		$("#reference_nob").val("");
 	  }else{
 		$("#slref").prop('readonly', true);
 		var temp = $("#temp_reference_no").val();
@@ -6770,7 +6773,7 @@ $(document).ready(function(){
 		var payable = $("#quick-payable").text();
 		var amount_1 = $("#amount_1").val();
         if(amount_1 == 0){
-		    if (e.keyCode == 13) {	            
+		    if (e.keyCode == 13) {
 		        $("#amount_1").val(payable);
                 $("#amount_1").focus();
 	            $(".currencies_payment").focus();

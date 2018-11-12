@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <input type="hidden" value="<?php echo $inv->id; ?>" name="sale_id"/>
-				<input type="hidden" value="<?= $inv->reference_no ?>" name="sale_reference_no" />
+				<input type="hidden" value="<?= $inv->reference_no ?>" name="sale_reference_no"/>
 				<input type="hidden" value="<?= $inv->customer ?>" name="customer_name" />
             </div>
             <div class="clearfix"></div>
@@ -162,7 +162,6 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-
                                         <input name="pcc_year" type="text" id="pcc_year_1" class="form-control"
                                                placeholder="<?= lang('year') ?>"/>
                                     </div>
