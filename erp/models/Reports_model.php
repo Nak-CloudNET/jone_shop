@@ -1473,7 +1473,7 @@ ORDER BY
     }
 	public function getSaleDailies($date)
     {
-        $this->db->select("date, reference_no, customer, sale_status, total_discount, grand_total, paid, (grand_total-paid) as balance, payment_status")
+        $this->db->select("date, reference_no, customer,customer_number, sale_status, total_discount, grand_total, paid, (grand_total-paid) as balance, payment_status")
 			->where("date >=", $date.' 00:00:00')
 			->where("date <=", $date.' 23:55:00');
 

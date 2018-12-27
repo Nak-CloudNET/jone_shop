@@ -1,7 +1,6 @@
 <?php
 	//$this->erp->print_arrays($inv);
 ?>
-
 <script type="text/javascript">
     var count = 1, an = 1, product_variant = 0, DT = <?= $Settings->default_tax_rate ?>,
         product_tax = 0, invoice_tax = 0, total_discount = 0, total = 0, allow_discount = <?= ($Owner || $Admin || $this->session->userdata('allow_discount')) ? 1 : 0; ?>,
@@ -31,11 +30,9 @@
 		localStorage.setItem('deposited', '<?= $payment->amount ?>');
 		<?php } ?>
         <?php } ?>
-		
 		if(localStorage.getItem('quote_ID')){
 			localStorage.removeItem('quote_ID');
 		}
-		
 		$("#sldate").datetimepicker({
 			format: site.dateFormats.js_ldate,
 			fontAwesome: true,
@@ -47,7 +44,6 @@
 			startView: 2,
 			forceParse: 0
 		}).datetimepicker('update', new Date());
-		
         $(document).on('change', '#sldate', function (e) {
             localStorage.setItem('sldate', $(this).val());
         });
@@ -57,11 +53,9 @@
         $(document).on('change', '#slbiller', function (e) {
             localStorage.setItem('slbiller', $(this).val());
         });
-		
         if (slbiller = localStorage.getItem('slbiller')) {
             $('#slbiller').val(slbiller);
         }
-		
         ItemnTotals();
         $("#add_item").autocomplete({
             source: function (request, response) {
@@ -110,7 +104,6 @@
                     });
                     $(this).removeClass('ui-autocomplete-loading');
                     // $(this).val('');
-
                 }
             },
             select: function (event, ui) {
@@ -131,7 +124,6 @@
                 $(this).autocomplete("search");
             }
         });
-
         $(window).bind('beforeunload', function (e) {
             localStorage.setItem('remove_slls', true);
             if (count > 1) {
@@ -167,7 +159,6 @@
         });
     });
 </script>
-
 <div class="box">
     <div class="box-header">
         <h2 class="blue"><i class="fa-fw fa fa-plus"></i><?= lang('edit_sale'); ?></h2>
@@ -175,7 +166,6 @@
     <div class="box-content">
         <div class="row">
             <div class="col-lg-12">
-
                 <p class="introtext"><?php echo lang('enter_info'); ?></p>
                 <?php
                 $attrib = array('data-toggle' => 'validator', 'role' => 'form', 'class' => 'edit-so-form');
@@ -226,7 +216,6 @@
                                 'id' => 'slbiller',
                                 'value' => $this->session->userdata('biller_id'),
                             );
-
                             echo form_input($biller_input);
                         } ?>
 

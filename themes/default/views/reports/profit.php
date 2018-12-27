@@ -34,6 +34,7 @@
                             <th><?php echo $this->lang->line("date"); ?></th>
                             <th><?php echo $this->lang->line("reference_no"); ?></th>
                             <th><?php echo $this->lang->line("customer"); ?></th>
+                            <th><?php echo $this->lang->line("cus_number"); ?></th>
                             <th><?php echo $this->lang->line("sale_status"); ?></th>
                             <th><?php echo $this->lang->line("grand_total"); ?></th>
 							<th><?php echo $this->lang->line("discount"); ?></th>
@@ -59,6 +60,7 @@
 								<td><?= $sale->date; ?></td>
 								<td><?= $sale->reference_no; ?></td>
 								<td><?= $sale->customer; ?></td>
+								<td><?= $sale->customer_number; ?></td>
 								<td><?= row_status($sale->sale_status); ?></td>
 								<td><?= number_format($sale->grand_total,2); ?></td>
 								<td><?= number_format($sale->total_discount,2); ?></td>
@@ -76,6 +78,7 @@
                             <th><?php echo $this->lang->line("date"); ?></th>
                             <th><?php echo $this->lang->line("reference_no"); ?></th>
                             <th><?php echo $this->lang->line("customer"); ?></th>
+                            <th><?php echo $this->lang->line("customer_number"); ?></th>
                             <th><?php echo $this->lang->line("sale_status"); ?></th>
                             <th><?php echo number_format($total,2); ?></th>
 							<th><?php echo number_format($total_discount,2); ?></th>
