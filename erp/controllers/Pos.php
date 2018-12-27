@@ -198,7 +198,7 @@ class Pos extends MY_Controller
                 ->select($this->db->dbprefix('sales').".id as id, 
 				".$this->db->dbprefix('sales').".date,
 				".$this->db->dbprefix('payments').".date as pdate,
-				".$this->db->dbprefix('sales').".reference_no, biller.company, customer, sale_status, grand_total, paid, (grand_total - paid) AS balance, payment_status")
+				".$this->db->dbprefix('sales').".reference_no, biller.company, customer, sale_status,customer_number, grand_total, paid, (grand_total - paid) AS balance, payment_status")
                 ->from('sales')
 				->join('payments', 'payments.sale_id=sales.id', 'left')
                 ->join('companies', 'companies.id=sales.customer_id', 'left')
@@ -211,7 +211,7 @@ class Pos extends MY_Controller
                 ->select($this->db->dbprefix('sales').".id as id, 
 				".$this->db->dbprefix('sales').".date,
 				".$this->db->dbprefix('payments').".date as pdate,
-				".$this->db->dbprefix('sales').".reference_no, biller.company, customer, sale_status , grand_total, paid, (grand_total - paid) AS balance, payment_status")
+				".$this->db->dbprefix('sales').".reference_no, biller.company, customer, sale_status ,customer_number, grand_total, paid, (grand_total - paid) AS balance, payment_status")
                 ->from('sales')
 				->join('payments', 'payments.sale_id=sales.id', 'left')
                 ->join('companies', 'companies.id=sales.customer_id', 'left')
@@ -436,6 +436,7 @@ class Pos extends MY_Controller
             $delivery_by 		= $this->input->post('delivery_by_1');
             $total_items 		= $this->input->post('total_items');
             $sale_status 		= $this->input->post('sale_status');
+            $cus_number 		= $this->input->post('cus_number');
             //$sale_status 		= 'completed';
             $payment_status 	= 'due';
             $payment_term 		= 0;
@@ -694,6 +695,7 @@ class Pos extends MY_Controller
                 'grand_total'       => $this->erp->formatDecimal($grand_total),
                 'total_items'       => $total_items,
                 'sale_status'       => $sale_status,
+                'customer_number'       => $cus_number,
                 'payment_status'    => $payment_status,
                 'recieve_usd'       => $recieve_usd,
                 'recieve_real'      => $recieve_real,

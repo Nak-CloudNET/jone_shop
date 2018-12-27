@@ -668,6 +668,7 @@ if ($q->num_rows() > 0) {
 									<input type="hidden" name="delivery_by_1" id="delivery_by_1" value=""/>
 									<input type="hidden" name="reference_nob" id="reference_nob" value="" required />
 									<input type="hidden" name="sale_status" id="sale_status_1" value=""/>
+									<input type="hidden" name="cus_number" id="cus_number_1" value=""/>
 									<input type="hidden" name="address" id="address" value=""/>
 									<input type="hidden" name="date" value="" class="date_c">
 									<input type="hidden" name="sale_type" value="<?= $type; ?>" class="sale_type">
@@ -1417,7 +1418,7 @@ if ($q->num_rows() > 0) {
 										echo form_dropdown('sale_status', $sst, '', 'class="form-control input-tip" required="required" id="sale_status"'); ?>
 									</div>
 								</div>
-								
+
 								<div class="col-sm-6">
 									<?= lang("reference_no", "slref"); ?>
 									<div style="float:left;width:100%;">
@@ -1432,18 +1433,26 @@ if ($q->num_rows() > 0) {
 										</div>
 									</div>
 								</div>
-								
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <?= lang("Number Of Customer", "cus_number"); ?>
+                                        <?php echo form_input('cus_number', "", 'class="form-control " id="cus_number"'); ?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 						<div class="form-group">
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <!--<?= form_textarea('staffnote', '', 'id="staffnote" class="form-control kb-text skip" style="height: 35px;" placeholder="' . lang('staff_note') . '" maxlength="250"'); ?>-->
+
                                 </div>
                                 <div class="col-sm-6">
-									<button type="button" class="btn btn-primary col-md-12 addButton">
-										<i class="fa fa-plus"></i> <?= lang('add_more_payments') ?>
-									</button>
+                                    <div class="form-group">
+
+                                        <button type="button" class="btn btn-primary col-md-12 addButton">
+                                            <i class="fa fa-plus"></i> <?= lang('add_more_payments') ?>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2849,7 +2858,9 @@ var lang = {unexpected_value: '<?=lang('unexpected_value');?>', select_above: '<
 		$('#sale_status').live('change keyup paste', function() {
 			$('#sale_status_1').val($(this).val());
 		}).trigger('change');
-		
+        $('#cus_number').live('change keyup paste', function() {
+            $('#cus_number_1').val($(this).val());
+        }).trigger('change');
 		$(document).on('change', '#other_cur_paid', function () {
             $('.other_cur_paid').val($(this).val());
 			$("#amount_1").trigger('change');

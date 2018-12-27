@@ -869,3 +869,4 @@ $lang['view_detail']						= "View Detail";
 $lang["sale_payment_report"]				= "Sale Payment Report";
 $lang["product_value_report"]				= "Product Value Report";
 $lang["product_report_product_value"]		= "Report Product Value";
+$lang["cus_number"]		= "Customer Num";

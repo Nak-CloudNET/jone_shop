@@ -70,7 +70,7 @@
             "aoColumns": [{
                 "bSortable": false,
                 "mRender": checkbox
-            }, {"mRender": fld}, {"mRender": fld}, null, null, null, {"mRender": row_status}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": row_status}, {"bSortable": false}],
+            }, {"mRender": fld}, {"mRender": fld}, null, null, null, {"mRender": row_status},null, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": row_status}, {"bSortable": false}],
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                 var gtotal = 0, paid = 0, balance = 0;
                 for (var i = 0; i < aaData.length; i++) {
@@ -375,6 +375,7 @@
                             <th><?= lang("biller"); ?></th>
                             <th><?= lang("customer"); ?></th>
 							<th><?= lang("sale_status"); ?></th>
+							<th><?= lang("cus_number"); ?></th>
                             <th><?= lang("grand_total"); ?></th>
                             <th><?= lang("paid"); ?></th>
                             <th><?= lang("balance"); ?></th>
@@ -397,6 +398,7 @@
                             <th></th>
                             <th></th>
                             <th></th>
+							<th></th>
 							<th></th>
                             <th><?= lang("grand_total"); ?></th>
                             <th><?= lang("paid"); ?></th>
