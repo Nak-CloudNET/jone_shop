@@ -373,7 +373,7 @@ class Sales extends MY_Controller
         $this->load->library('datatables');
         if ($warehouse_id) {
             $this->datatables
-                ->select("sales.id, sales.date, erp_quotes.reference_no as q_no,sale_order.reference_no as so_no, sales.reference_no as sale_no, sales.biller, sales.customer, users.username AS saleman, sales.sale_status, sales.grand_total,(SELECT SUM(IF(erp_payments.paid_by = 'deposit', erp_payments.amount, 0)) FROM erp_payments WHERE erp_payments.sale_id = erp_sales.id  ) as deposit, COALESCE((erp_sales.paid - (SELECT SUM(IF(erp_payments.paid_by = 'deposit', erp_payments.amount, 0)) FROM erp_payments WHERE erp_payments.sale_id = erp_sales.id)),0), (ROUND(erp_sales.grand_total, 2)-erp_sales.paid) as balance, sales.payment_status")
+                ->select("sales.id, sales.date, erp_quotes.reference_no as q_no,sale_order.reference_no as so_no, sales.reference_no as sale_no, sales.biller, sales.customer,sales.customer_number, users.username AS saleman, sales.sale_status, sales.grand_total,(SELECT SUM(IF(erp_payments.paid_by = 'deposit', erp_payments.amount, 0)) FROM erp_payments WHERE erp_payments.sale_id = erp_sales.id  ) as deposit, COALESCE((erp_sales.paid - (SELECT SUM(IF(erp_payments.paid_by = 'deposit', erp_payments.amount, 0)) FROM erp_payments WHERE erp_payments.sale_id = erp_sales.id)),0), (ROUND(erp_sales.grand_total, 2)-erp_sales.paid) as balance, sales.payment_status")
                 ->from('sales')
 				->join('companies', 'companies.id = sales.customer_id', 'left')
                 ->join('users', 'users.id = sales.saleman_by', 'left')
@@ -405,7 +405,7 @@ class Sales extends MY_Controller
             
         } else {
 			$this->datatables
-				->select("sales.id, sales.date as date,erp_quotes.reference_no as q_no, sale_order.reference_no as so_no, sales.reference_no as sale_no, sales.biller, sales.customer, users.username AS saleman, sales.sale_status, sales.grand_total, (SELECT SUM(IF(erp_payments.paid_by = 'deposit', erp_payments.amount, 0)) FROM erp_payments WHERE erp_payments.sale_id = erp_sales.id  ) as deposit, COALESCE((erp_sales.paid - (SELECT SUM(IF(erp_payments.paid_by = 'deposit', erp_payments.amount, 0)) FROM erp_payments WHERE erp_payments.sale_id = erp_sales.id)),0), (ROUND(erp_sales.grand_total, 2)-erp_sales.paid) as balance, sales.payment_status")
+				->select("sales.id, sales.date as date,erp_quotes.reference_no as q_no, sale_order.reference_no as so_no, sales.reference_no as sale_no, sales.biller, sales.customer,sales.customer_number, users.username AS saleman, sales.sale_status, sales.grand_total, (SELECT SUM(IF(erp_payments.paid_by = 'deposit', erp_payments.amount, 0)) FROM erp_payments WHERE erp_payments.sale_id = erp_sales.id  ) as deposit, COALESCE((erp_sales.paid - (SELECT SUM(IF(erp_payments.paid_by = 'deposit', erp_payments.amount, 0)) FROM erp_payments WHERE erp_payments.sale_id = erp_sales.id)),0), (ROUND(erp_sales.grand_total, 2)-erp_sales.paid) as balance, sales.payment_status")
 				->from('sales')
 				->join('users', 'users.id = sales.saleman_by', 'left')
 				->join('sale_order', 'sale_order.id = sales.so_id', 'left')
@@ -2151,6 +2151,7 @@ class Sales extends MY_Controller
             $tax_rate 	= "tax_rate";
 			$biller_id 			= $this->input->post('biller');
             $reference 	= $this->input->post('reference_no') ? $this->input->post('reference_no') : $this->site->getReference('so',$biller_id);
+            $customer_number 	= $this->input->post('cus_number') ? $this->input->post('cus_number') : $this->site->getReference('so',$biller_id);
 
             if ($this->Owner || $this->Admin || $this->Settings->allow_change_date == 1) {
                 $date = $this->erp->fld(trim($this->input->post('date')));
@@ -2165,6 +2166,7 @@ class Sales extends MY_Controller
 			$saleman_by 		= $this->input->post('saleman');
             $total_items 		= $this->input->post('total_items');
             $sale_status 		= $this->input->post('sale_status');
+            $cus_number 		= $this->input->post('cus_number');
 			//if($this->input->)
             $payment_status 	= 'due';
             $delivery_by        = $this->input->post('delivery_by');
@@ -2415,6 +2417,7 @@ class Sales extends MY_Controller
                 'grand_total' 			=> $this->erp->formatDecimal($grand_total),
                 'total_items' 			=> $total_items,
                 'sale_status' 			=> $sale_status,
+                'customer_number' 			=> $cus_number,
                 'payment_status' 		=> $payment_status,
                 'payment_term' 		    => $payment_term,
                 'due_date' 				=> $due_date,
@@ -3748,6 +3751,7 @@ class Sales extends MY_Controller
         $this->form_validation->set_rules('customer', lang("customer"), 'required');
         $this->form_validation->set_rules('biller', lang("biller"), 'required');
         $this->form_validation->set_rules('sale_status', lang("sale_status"), 'required');
+        //$this->form_validation->set_rules('cus_number', lang("cus_number"), 'required');
         //$this->form_validation->set_rules('payment_status', lang("payment_status"), 'required');
         //$this->form_validation->set_rules('note', lang("note"), 'xss_clean');
 
@@ -3757,7 +3761,8 @@ class Sales extends MY_Controller
             $unit_cost = "unit_cost";
             $tax_rate = "tax_rate";
             $reference = $this->input->post('reference_no');
-			
+
+
 			if ($this->Owner || $this->Admin || $this->Settings->allow_change_date == 1) {
                 $date = $this->erp->fld(trim($this->input->post('date')));
             } else {
@@ -3771,6 +3776,7 @@ class Sales extends MY_Controller
 			$saleman_by             = $this->input->post('saleman');
             $total_items            = $this->input->post('total_items');
             $sale_status            = $this->input->post('sale_status');
+            $cus_number             = $this->input->post('cus_number');
             //$payment_status       = $this->input->post('payment_status');
             $payment_status         = 'due';
             $delivery_by            = $this->input->post('delivery_by');
@@ -3983,6 +3989,7 @@ class Sales extends MY_Controller
                 'grand_total' => $grand_total,
                 'total_items' => $total_items,
                 'sale_status' => $sale_status,
+                'customer_number' => $cus_number,
                 'payment_status' => $payment_status,
 				'total_cost' => '0',
                 //'paid' => ($amout_paid != '' || $amout_paid != 0 || $amout_paid != null)? $amout_paid : 0,
@@ -4171,7 +4178,7 @@ class Sales extends MY_Controller
 			
             $this->session->set_userdata('remove_slls', 1);
             $this->session->set_flashdata('message', lang("sale_updated"));
-            redirect("pos/sales");
+            redirect("sales");
         } else {
 
             $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));

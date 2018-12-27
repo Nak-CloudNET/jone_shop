@@ -101,7 +101,7 @@
             "aoColumns": [{
                 "bSortable": false,
                 "mRender": checkbox
-            }, {"mRender": fld},null, null, null, null, null, null, {"mRender": row_status}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": row_status}, {"bSortable": false}],
+            }, {"mRender": fld},null, null, null, null, null,null, null, {"mRender": row_status}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": currencyFormat}, {"mRender": row_status}, {"bSortable": false}],
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                 var gtotal = 0, tdeposit = 0, paid = 0, balance = 0, status = ' ',gpaid=0;
                 for (var i = 0; i < aaData.length; i++) {
@@ -669,6 +669,7 @@
                             <th><?php echo $this->lang->line("sale_ref"); ?></th>
                             <th><?php echo $this->lang->line("biller"); ?></th>
                             <th><?php echo $this->lang->line("customer"); ?></th>
+                            <th><?php echo $this->lang->line("cus_number"); ?></th>
 							<th><?php echo $this->lang->line("saleman"); ?></th>
                             <th><?php echo $this->lang->line("sale_status"); ?></th>
                             <th><?php echo $this->lang->line("grand_total"); ?></th>
@@ -692,6 +693,7 @@
                             </th>
                             <th></th>
 							<th></th>
+                            <th></th>
                             <th></th>
                             <th></th>
                             <th></th>

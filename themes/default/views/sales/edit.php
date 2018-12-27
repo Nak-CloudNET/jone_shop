@@ -14,6 +14,7 @@
         localStorage.setItem('slcustomer', '<?= $inv->customer_id ?>');
         localStorage.setItem('slbiller', '<?= $inv->biller_id ?>');
         localStorage.setItem('slref', '<?= $inv->reference_no ?>');
+        localStorage.setItem('cus_number', '<?= $inv->customer_number ?>');
         localStorage.setItem('slwarehouse', '<?= $inv->warehouse_id ?>');
         localStorage.setItem('slsale_status', '<?= $inv->sale_status ?>');
         localStorage.setItem('slpayment_status', '<?= $inv->payment_status ?>');
@@ -314,12 +315,15 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?= lang("Number Of Customer", "cus_number"); ?>
+                                            <?php echo form_input('cus_number',(isset($_POST['cus_number']) ? $_POST['cus_number'] : $inv->customer_number), 'class="form-control " id="cus_number"'); ?>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-
                         </div>
-
-
                         <div class="col-md-12" id="sticker">
                             <div class="well well-sm">
                                 <div class="form-group" style="margin-bottom:0;">

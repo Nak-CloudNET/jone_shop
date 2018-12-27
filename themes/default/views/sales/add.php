@@ -56,6 +56,9 @@
 				if (localStorage.getItem('slcustomer')) {
 					localStorage.removeItem('slcustomer');
 				}
+            if (localStorage.getItem('cus_number')) {
+                localStorage.removeItem('cus_number');
+            }
 				if (localStorage.getItem('slcurrency')) {
 					localStorage.removeItem('slcurrency');
 				}
@@ -201,6 +204,7 @@
         }
         <?php } ?>
 
+
         if (!localStorage.getItem('sldate')) {
             $("#sldate").datetimepicker({
                 format: site.dateFormats.js_ldate,
@@ -224,8 +228,10 @@
 
 		if (slsale_status = localStorage.getItem('slsale_status')) {
             $('#slsale_status').val(slsale_status);
-        } 
-		
+        }
+        if (cus_number = localStorage.getItem('cus_number')) {
+            $('#cus_number').val(cus_number);
+        }
 		<?php 
 			if(isset($so_deposit)){
 				
@@ -655,6 +661,17 @@
                                                             class="fa fa-2x fa-plus-circle" id="addIcon"></i></a></div>
                                             </div>
                                             <?php } ?>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <?= lang("Number Of Customer", "cus_number"); ?>
+                                            <?php if ($Owner || $Admin || $GP['customers-add']) { ?><?php } ?>
+                                                    <?php echo form_input('cus_number', "", 'class="form-control " id="cus_number"'); ?>
+                                                <?php if ($Owner || $Admin || $GP['customers-add']) { ?>
+
+                                        <?php } ?>
                                         </div>
                                     </div>
                                 </div>
