@@ -5049,4 +5049,27 @@ class Sales_model extends CI_Model
 		}
 		return false;
 	}
+
+    public function getPaymentClosingByID($id)
+    {
+        $q = $this->db->get_where('payments', array('id' => $id), 1);
+        if ($q->num_rows() > 0) {
+            return $q->row();
+        }
+        return FALSE;
+    }
+
+    public function getSaleByDate($start_date, $end_date)
+    {
+        $this->db->select("sales.id, sales.date as date,sales.sale_status, sales.grand_total, (SELECT SUM(COALESCE(erp_payments.amount, 0)) FROM erp_payments WHERE erp_payments.sale_id = erp_sales.id  )")
+                    ->from('sales')
+                    ->where(array('DATE_FORMAT(erp_sales.date, "%Y-%m-%d") >=' => $start_date, 'DATE_FORMAT(erp_sales.date, "%Y-%m-%d") <=' => $end_date))
+                    ->group_by('sales.id');
+            $q = $this->db->get();
+        if ($q->num_rows() > 0) {
+            return $q->result();
+        }
+        return FALSE;
+    }
+
 }

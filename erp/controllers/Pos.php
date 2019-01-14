@@ -421,7 +421,7 @@ class Pos extends MY_Controller
         }
 
         if ($this->form_validation->run() == true){
-            
+
             $quantity 			= "quantity";
             $product 			= "product";
             $unit_cost 			= "unit_cost";
@@ -450,6 +450,7 @@ class Pos extends MY_Controller
             //$staff_note = $this->erp->clear_tags($this->input->post('staff_note'));
 			$suspend_room 		= $this->input->post('suspend_room');
 			$reference 			= $this->input->post('reference_nob');
+			//$this->erp->print_arrays($reference);
             $bank_account       = $this->input->post('bank_account');
 
             if ($this->session->userdata('biller_id')) {
@@ -457,7 +458,7 @@ class Pos extends MY_Controller
             } else {
                 $default_biller = $this->Settings->default_biller;
             }
-			
+
             $total 				= 0;
             $product_tax 		= 0;
             $order_tax 			= 0;
@@ -467,7 +468,7 @@ class Pos extends MY_Controller
             $g_total_txt1 		= 0;
 			$total_discount 	= 0;
 			$totalcost 			= 0;
-            
+
             $i = isset($_POST['product_code']) ? sizeof($_POST['product_code']) : 0;
             for ($r = 0; $r < $i; $r++) {
                 $item_id   		= $_POST['product_id'][$r];
@@ -477,16 +478,16 @@ class Pos extends MY_Controller
                 $item_name 		= $_POST['product_name'][$r];
 				$item_cost 		= $_POST['item_cost'][$r];
                 $item_option 	= isset($_POST['product_option'][$r]) && $_POST['product_option'][$r] != 'false' ? $_POST['product_option'][$r] : NULL;
-			    
+
                 $real_unit_price = $this->erp->formatDecimal($_POST['real_unit_price'][$r]);
                 $unit_price 	= $this->erp->formatDecimal($_POST['unit_price'][$r]);
-                $item_quantity 	= $_POST['quantity'][$r]; 
+                $item_quantity 	= $_POST['quantity'][$r];
                 $item_serial 	= isset($_POST['serial'][$r]) ? $_POST['serial'][$r] : '';
                 $item_tax_rate 	= isset($_POST['product_tax'][$r]) ? $_POST['product_tax'][$r] : NULL;
                 $item_discount 	= isset($_POST['product_discount'][$r]) ? $_POST['product_discount'][$r] : NULL;
 				$price_tax_cal  = $unit_price;
                 $g_total_txt 	= $_POST['grand_total'][$r];
-				
+
                 if (isset($item_code) && isset($real_unit_price) && isset($unit_price) && isset($item_quantity)) {
                     $product_details 	= $item_type != 'manual' ? $this->pos_model->getProductByCode($item_code) : NULL;
                     $unit_price 		= $real_unit_price;
@@ -503,7 +504,7 @@ class Pos extends MY_Controller
 							}
 						}
 					}
-					
+
                     if (isset($item_discount)) {
                         $discount = $item_discount;
                         $dpos = strpos($discount, $percentage);
@@ -514,12 +515,12 @@ class Pos extends MY_Controller
                             $pr_discount = $discount/$item_quantity;
                         }
                     }
-                    
+
 					$unitPrice 			= $unit_price;
                     //$unit_price 		= $this->erp->formatDecimal($unit_price - $pr_discount, 8);
-                    $item_net_price 	= $unit_price; 
-                    $pr_item_discount 	= $this->erp->formatDecimal($pr_discount * $item_quantity); 
-                    $product_discount 	+= $pr_item_discount; 
+                    $item_net_price 	= $unit_price;
+                    $pr_item_discount 	= $this->erp->formatDecimal($pr_discount * $item_quantity);
+                    $product_discount 	+= $pr_item_discount;
                     $pr_tax = 0; $pr_item_tax = 0; $item_tax = 0; $tax = "";
 
                     if (isset($item_tax_rate) && $item_tax_rate != 0) {
@@ -550,25 +551,25 @@ class Pos extends MY_Controller
                         }
                         $pr_item_tax 	= $this->erp->formatDecimal($item_tax * $item_quantity, 4);
                     }
-					
+
 					$product_tax += $pr_item_tax;
-					
+
 					$unit_price  = $this->erp->formatDecimal($unit_price - $this->erp->formatDecimal($pr_discount), 8);
-					
+
 					if($item_option != 0) {
 						$row 		= $this->purchases_model->getVariantQtyById($item_option);
 						$item_cost  = $item_cost * $row->qty_unit;
 					}
-					
+
 					$totalcost	+= $item_cost;
-					
+
 					if( $product_details->tax_method == 0){
 						$subtotal = (($unit_price * $item_quantity));
-						
+
 					}else{
 						$subtotal = (($unit_price * $item_quantity) + $pr_item_tax);
 					}
-					
+
                     $products[] = array(
                         'product_id' 		=> $item_id,
                         'product_code' 		=> $item_code,
@@ -589,7 +590,7 @@ class Pos extends MY_Controller
                         'serial_no' 		=> $item_serial,
                         'real_unit_price' 	=> $real_unit_price,
 						'product_noted' 	=> $item_note
-                    ); 
+                    );
                     $total += $subtotal;
 					$g_total_txt1 += $subtotal;
 					$total_discount+=$product_discount;
@@ -607,16 +608,16 @@ class Pos extends MY_Controller
                 if ($opos !== false) {
                     $ods = explode("%", $order_discount_id);
                     $order_discount = $this->erp->formatDecimal((($total) * (Float)($ods[0])) / 100);
-				 
+
                 } else {
                     $order_discount = $this->erp->formatDecimal(($total * $order_discount_id)/100);
-					
+
                 }
             } else {
                 $order_discount_id = NULL;
             }
             $total_discount = $this->erp->formatDecimal($order_discount + $product_discount);
-            
+
             if ($this->Settings->tax2) {
                 $order_tax_id = $this->input->post('order_tax');
                 if ($order_tax_details = $this->site->getTaxRateByID($order_tax_id)) {
@@ -636,12 +637,12 @@ class Pos extends MY_Controller
 			$other_cur_paid = 0;
 			$pos_balance = 0;
 			$paidd = 0;
-			
+
 			$paidd 			= 0;
 			$amt_p 			= 0;
 			$p 				= isset($_POST['amount']) ? sizeof($_POST['amount']) : 0;
 			$p_cur 			= isset($_POST['other_cur_paid']) ? sizeof($_POST['other_cur_paid']) : 0;
-			
+
 			for ($r = 0; $r < $p; $r++) {
 				$amt_p 			+= $_POST['amount'][$r];
 				$other_cur_paid += ($_POST['other_cur_paid'][$r]/$cur_rate->rate);
@@ -650,20 +651,20 @@ class Pos extends MY_Controller
 					$paidd 		= $grand_total;
 				}
 			}
-			
+
 			$suppend_name = $this->pos_model->get_suppendName($did);
 
             $i=1;
-            $query=0; 
+            $query=0;
 
             $date = $this->input->post('date');
             $dates = date('Y-m-d',strtotime($date));
-                
+
             $this->db
                 ->select("DATE_FORMAT(date,'%d') as date, biller_id, queue")
                 ->where("DATE_FORMAT(date,'%Y-%m-%d')",$dates)
                 ->where('biller_id', $biller_id)
-                ->order_by('id DESC'); 
+                ->order_by('id DESC');
             $queues = $this->db->get('erp_sales')->row();
             $cdate = date('d');
 
@@ -672,7 +673,7 @@ class Pos extends MY_Controller
             } else {
                 $query = $i;
             }
-            
+
             $data = array(
                 'date'              => $date,
                 'reference_no'      => $reference,
@@ -711,8 +712,8 @@ class Pos extends MY_Controller
 				'type_id'           => $this->input->post('sale_type_id'),
 				'queue'           	=> $query
             );
-            
-			
+
+
 			if($_POST['paid_by'][0] == 'depreciation'){
 				$no = sizeof($_POST['no']);
 				$period = 1;
@@ -801,9 +802,9 @@ class Pos extends MY_Controller
 								'pos_paid_other' 		=> $_POST['other_cur_paid'][$r],
 								'pos_paid_other_rate' 	=> $cur_rate->rate,
 								'bank_account' 			=> $bank_account[$r]
-							); 
+							);
 						} else {
-							
+
 							$payment[] = array(
 								'biller_id'				=> $biller_id,
 								'date' 					=> $date,
@@ -827,7 +828,7 @@ class Pos extends MY_Controller
 								'bank_account' 			=> $bank_account[$r]
 							);
 						}
-						
+
                         $pp[] = $paidd;
                         $this->site->updateReference('sp');
                     }*/
@@ -879,7 +880,7 @@ class Pos extends MY_Controller
                         }
                     }
                 }*/
-				
+
 				if($kh_paid == true){
 					if (!empty($pp)) {
 						$paid = array_sum($pp);
@@ -895,9 +896,9 @@ class Pos extends MY_Controller
 						$paid = 0;
 					}
 				}
-								
+
             }
-			
+
             if (!isset($payment) || empty($payment)) {
                 $payment = array();
             }
@@ -913,7 +914,7 @@ class Pos extends MY_Controller
                     $this->session->set_flashdata('message', $this->lang->line("sale_suspended"));
                     redirect("pos");
                 }
-				
+
             } else {
 				$data['payment_status'] = $payment_status;
                 if ($sale = $this->pos_model->addSale($data, $products, $payment, $did, $loans)) {
@@ -932,11 +933,11 @@ class Pos extends MY_Controller
 								'bank_code' 	=> $pay['bank_account'],
 								'status' 		=> 'paid'
 							);
-							
+
 							$this->sales_model->add_deposit($deposits);
 						}
 					}
-					
+
 					$suspended_sale = $this->pos_model->getOpenBillByID($did);
 
 					$inactive = $this->pos_model->updateSuspendactive($suspended_sale->suspend_id);
@@ -987,7 +988,7 @@ class Pos extends MY_Controller
 				if($suspended_sale){
 					$suspended = $this->pos_model->getSuspended($suspended_sale->suspend_id);
 				}
-				
+
                 $inv_items = $this->pos_model->getSuspendedSaleItems($sid);
                 $c = rand(100000, 9999999);
                 foreach ($inv_items as $item) {
@@ -1059,22 +1060,22 @@ class Pos extends MY_Controller
                 $this->data['customer'] = $this->pos_model->getCompanyByID($this->pos_settings->default_customer);
                 $this->data['reference_note'] = NULL;
             }
-				
+
 			if ($sale_order_id){
-				
+
                 $sale_order = $this->sales_model->getSalePOS($sale_order_id);
 				$this->data['sale_order'] = $sale_order;
 				$items = $this->sales_model->getPOSOrdItems($sale_order_id);
 				$this->data['sale_order_id'] = $sale_order_id;
 				$this->data['type'] = "sale_order";
 				$this->data['type_id'] = $sale_order_id;
-				
+
 				$customer = $this->site->getCompanyByID($sale_order->customer_id);
-				
+
                 $c = rand(100000, 9999999);
                 foreach ($items as $item) {
                     $row = $this->site->getProductByID($item->product_id);
-					
+
                     if (!$row) {
                         $row = json_decode('{}');
                         $row->tax_method = 0;
@@ -1100,11 +1101,11 @@ class Pos extends MY_Controller
                     $row->tax_rate = $item->tax_rate_id;
                     $row->serial = '';
                     $row->option = $item->option_id;
-					
+
 					$group_prices = $this->sales_model->getProductPriceGroup($item->product_id, $customer->price_group_id);
 					$all_group_prices = $this->sales_model->getProductPriceGroup($item->product_id);
 					$row->price_id = 0;
-					
+
                     $options = $this->sales_model->getProductOptions($row->id, $item->warehouse_id);
                     if ($options) {
                         $option_quantity = 0;
@@ -1133,12 +1134,12 @@ class Pos extends MY_Controller
                     }
                     $c++;
                 }
-				
+
 				$this->data['sale_order_id'] = $sale_order_id;
                 $this->data['sale_order_items'] = json_encode($pr);
 				$this->data['payment_deposit'] = $payment_deposit;
             }
-			
+
 			if ($combine_table) {
                 $suspended_sale = $this->pos_model->getOpenBillByArrayID($combine_table);
 				$suspended 		= $this->pos_model->getSuspended($suspended_sale->suspend_id);

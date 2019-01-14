@@ -655,6 +655,12 @@
                                                 <span class="text"> <?= lang('list_sales_return'); ?></span>
                                             </a>
                                         </li>
+                                        <li id="closing_reciept">
+                                            <a class="submenu" href="<?= site_url('sales/closing_receipt'); ?>">
+                                                <i class="fa fa-reply"></i>
+                                                <span class="text"> <?= lang('Closing Receipt'); ?></span>
+                                            </a>
+                                        </li>
                                         <!--<li id="sales_add_return">
                                             <a class="submenu" href="<?= site_url('sales/add_return'); ?>">
                                                 <i class="fa fa-plus-circle"></i>
