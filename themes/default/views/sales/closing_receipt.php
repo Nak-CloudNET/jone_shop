@@ -240,7 +240,6 @@ if(isset($alert_id)){
                     </div>
                     <div class="table-responsive">
                         <table class="table table-bordered">
-
                             <tr>
                                 <td style="border-right: 1px solid white !important;border-left: 1px solid black;border-top: 1px solid black">Currenct</td>
                                 <td style="border-right: 1px solid white !important;border-top: 1px solid black"></td>
@@ -249,28 +248,44 @@ if(isset($alert_id)){
                                 <td style="border-right: 1px solid black;border-top: 1px solid black">Amount</td>
 
                             </tr>
-
                             <tbody>
+                            <?php
+                                $check = 0;
+                                $gust = 0;
+                                $tatal_amount = 0;
+                                $toral_riel = 0;
+                                $cus_number = 0;
+                                $count_paid = 0;
+                                foreach ($sales as $sale){
+                                    $check++;
+                                    $tatal_amount += $sale->amount;
+                                    $cus_number += $sale->customer_number;
+                                    $total_riel += $sale->amount * 4000;
+                                }
+                            ?>
                             <tr>
                                 <td style="border-right: 1px solid white !important;border-bottom: 1px solid white !important;border-left: 1px solid black">USD</td>
                                 <td style="border-right: 1px solid white !important;border-bottom: 1px solid white !important;"></td>
-                                <td style="border-right: 1px solid white !important;border-bottom: 1px solid white !important;">104</td>
-                                <td style="border-right: 1px solid white !important;border-bottom: 1px solid white !important;">110</td>
-                                <td style="border-bottom: 1px solid white !important;border-right: 1px solid black"><?= $sale->amount;?></td>
+                                <td style="border-right: 1px solid white !important;border-bottom: 1px solid white !important;"><?=  $check; ?></td>
+                                <td style="border-right: 1px solid white !important;border-bottom: 1px solid white !important;"><?= $cus_number ?></td>
+                                <td style="border-bottom: 1px solid white !important;border-right: 1px solid black"><?= $this->erp->formatMoney($tatal_amount) ?></td>
+
+
                             </tr>
                             <tr>
                                 <td style="border-right: 1px solid white !important;border-bottom: 1px solid white !important;border-left: 1px solid black">Riel</td>
                                 <td style="border-right: 1px solid white !important;border-bottom: 1px solid white !important;border-left: 1px solid black"></td>
-                                <td style="border-right: 1px solid white !important;border-bottom: 1px solid black !important;">35</td>
-                                <td style="border-right: 1px solid white !important;border-bottom: 1px solid black !important;">38</td>
-                                <td style="border-bottom: 1px solid black !important;border-right: 1px solid black">75.69</td>
+                                <td style="border-right: 1px solid white !important;border-bottom: 1px solid black !important;"><?=  $check; ?></td>
+                                <td style="border-right: 1px solid white !important;border-bottom: 1px solid black !important;"><?= $cus_number ?></td>
+                                <td style="border-bottom: 1px solid black !important;border-right: 1px solid black"><?= $this->erp->formatMoney($total_riel) ?></td>
                             </tr>
                             <tr>
                                 <td style="border-right: 1px solid white !important;border-bottom: 1px solid white !important;border-left: 1px solid black"></td>
                                 <td style="text-align: right; border-right: 1px solid white !important;border-bottom: 1px solid white !important;">Cash</td>
                                 <td style="border-right: 1px solid white !important;border-bottom: 1px solid black !important;"></td>
                                 <td style="border-right: 1px solid white !important;border-bottom: 1px solid black !important;"></td>
-                                <td style="border-bottom: 1px solid black !important;border-right: 1px solid black">1260.02</td>
+                               <td style="border-bottom: 1px solid black !important;border-right: 1px solid black">45.36</td>;
+
                             </tr>
                             <tr>
                                 <td style="border-right: 1px solid white !important;border-bottom: 1px solid white !important;border-left: 1px solid black">VISA</td>

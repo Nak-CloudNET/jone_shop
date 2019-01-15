@@ -13582,18 +13582,19 @@ class Sales extends MY_Controller
     function closing_receipt()
     {
         if ($this->input->post('start_date')) {
-            $start_date = $this->input->post('start_date');
+            $start_date = $this->erp->fld($this->input->post('start_date'));
         } else {
             $start_date = date('Y-m-d');
         }
         if ($this->input->post('end_date')) {
-            $end_date = $this->input->post('end_date');
+            $end_date = $this->erp->fld($this->input->post('end_date'));
         } else {
             $end_date = date('Y-m-d');
         }
-
-        //$this->erp->print_arrays($this->sales_model->getSaleByDate($start_date, $end_date));
         $this->data['sales'] = $this->sales_model->getSaleByDate($start_date, $end_date);
+        $this->data['count_customer'] = $this->sales_model->getCountCustomerInSale($start_date, $end_date);
+        $this->data['count_discount'] = $this->sales_model->getCountDiscount($start_date, $end_date);
+        //$this->erp->print_arrays($this->data['sales']);
         $this->data['start_date'] = $start_date;
         $this->data['end_date'] = $end_date;
         $bc = array(array('link' => base_url(), 'page' => lang('home')), array('link' => '#', 'page' => lang('Closing Receipt')));

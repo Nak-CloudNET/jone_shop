@@ -5061,8 +5061,9 @@ class Sales_model extends CI_Model
 
     public function getSaleByDate($start_date, $end_date)
     {
-        $this->db->select("sales.id, sales.date as date,sales.sale_status, sales.grand_total, (SELECT SUM(COALESCE(erp_payments.amount, 0)) FROM erp_payments WHERE erp_payments.sale_id = erp_sales.id  )")
+        $this->db->select("sales.id, sales.customer_id, sales.date as date,sales.sale_status, sales.grand_total,sales.customer_number,erp_payments.paid_by, COALESCE((SELECT SUM(COALESCE(erp_payments.amount, 0))  FROM erp_payments WHERE erp_payments.sale_id = erp_sales.id ), 0) as amount ")
                     ->from('sales')
+                    ->join('erp_payments','sales.id = erp_payments.sale_id','left')
                     ->where(array('DATE_FORMAT(erp_sales.date, "%Y-%m-%d") >=' => $start_date, 'DATE_FORMAT(erp_sales.date, "%Y-%m-%d") <=' => $end_date))
                     ->group_by('sales.id');
             $q = $this->db->get();
@@ -5072,4 +5073,30 @@ class Sales_model extends CI_Model
         return FALSE;
     }
 
+    public function getCountCustomerInSale($start_date, $end_date)
+    {
+        $this->db->select("sales.id, sales.customer_id,")
+            ->from('sales')
+            ->where(array('DATE_FORMAT(erp_sales.date, "%Y-%m-%d") >=' => $start_date, 'DATE_FORMAT(erp_sales.date, "%Y-%m-%d") <=' => $end_date))
+            ->group_by('sales.customer_id');
+        $q = $this->db->get();
+        if ($q->num_rows() > 0) {
+            return $q->result();
+        }
+        return FALSE;
+
+    }
+    public function getCountDiscount($start_date, $end_date)
+    {
+        $this->db->select("sales.id, sales.customer_id, sales.date as date,sales.sale_status, sales.grand_total,sales.order_discount_id, COALESCE((SELECT SUM(COALESCE(erp_payments.amount, 0))  FROM erp_payments WHERE erp_payments.sale_id = erp_sales.id ), 0) as amount ")
+            ->from('sales')
+            ->where(array('DATE_FORMAT(erp_sales.date, "%Y-%m-%d") >=' => $start_date, 'DATE_FORMAT(erp_sales.date, "%Y-%m-%d") <=' => $end_date))
+            ->group_by('sales.id');
+        $q = $this->db->get();
+        if ($q->num_rows() > 0) {
+            return $q->result();
+        }
+        return FALSE;
+
+    }
 }
